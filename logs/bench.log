@@ -395,3 +395,4 @@
 2026-05-21 11:45:33,792 INFO /usr/local/bin/bench serve --port 8000
 2026-05-21 11:45:33,835 INFO /usr/local/bin/bench worker
 2026-05-21 11:45:33,837 INFO /usr/local/bin/bench schedule
+2026-05-21 12:00:01,899 INFO /usr/local/bin/bench --verbose --site all backup

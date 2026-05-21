@@ -1,0 +1,397 @@
+2026-05-08 11:31:10,753 DEBUG cd frappe-bench && python3 -m venv env
+2026-05-08 11:31:16,315 DEBUG cd frappe-bench && /home/ivy/frappe-bench/env/bin/python -m pip install --quiet --upgrade pip
+2026-05-08 11:31:20,122 DEBUG cd frappe-bench && /home/ivy/frappe-bench/env/bin/python -m pip install --quiet wheel
+2026-05-08 11:31:23,906 LOG Getting frappe
+2026-05-08 11:31:23,906 DEBUG cd frappe-bench/apps && git clone https://github.com/frappe/frappe.git --branch version-15 --depth 1 --origin upstream
+2026-05-08 11:31:37,824 LOG Installing frappe
+2026-05-08 11:31:37,824 DEBUG cd /home/ivy/frappe-bench && /home/ivy/frappe-bench/env/bin/python -m pip install --quiet --upgrade -e /home/ivy/frappe-bench/apps/frappe 
+2026-05-08 11:33:01,601 DEBUG cd /home/ivy/frappe-bench/apps/frappe && yarn install --check-files
+2026-05-08 11:33:21,242 DEBUG cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe:
+2026-05-08 11:33:21,723 WARNING cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe: executed with exit code 2
+2026-05-08 11:33:21,724 WARNING restarting supervisor group `frappe:` failed. Use `bench restart` to retry.
+2026-05-08 11:33:21,724 DEBUG cd frappe-bench && bench build
+2026-05-08 11:33:22,036 INFO /usr/local/bin/bench build
+2026-05-08 11:34:18,717 LOG setting up backups
+2026-05-08 11:34:18,731 LOG backups were set up
+2026-05-08 11:34:18,731 INFO Bench frappe-bench initialized
+2026-05-08 11:34:19,302 INFO A newer version of bench is available: 5.23.0 → 5.29.1
+2026-05-08 11:34:39,123 INFO /usr/local/bin/bench version
+2026-05-08 11:35:35,816 INFO /usr/local/bin/bench get-app erpnext --branch v15.95.0
+2026-05-08 11:35:36,698 LOG Getting erpnext
+2026-05-08 11:35:36,698 DEBUG cd ./apps && git clone https://github.com/frappe/erpnext.git --branch v15.95.0 --depth 1 --origin upstream
+2026-05-08 11:35:48,403 LOG Installing erpnext
+2026-05-08 11:35:48,404 DEBUG cd /home/ivy/frappe-bench && /home/ivy/frappe-bench/env/bin/python -m pip install --quiet --upgrade -e /home/ivy/frappe-bench/apps/erpnext 
+2026-05-08 11:36:21,492 DEBUG cd /home/ivy/frappe-bench/apps/erpnext && yarn install --check-files
+2026-05-08 11:36:22,438 DEBUG bench build --app erpnext
+2026-05-08 11:36:22,760 INFO /usr/local/bin/bench build --app erpnext
+2026-05-08 11:36:30,303 DEBUG cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe:
+2026-05-08 11:36:30,766 WARNING cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe: executed with exit code 2
+2026-05-08 11:36:30,766 WARNING restarting supervisor group `frappe:` failed. Use `bench restart` to retry.
+2026-05-08 11:37:39,249 INFO A newer version of bench is available: 5.23.0 → 5.29.1
+2026-05-08 11:38:26,611 INFO /usr/local/bin/bench new-site erpnext
+2026-05-08 11:39:46,561 INFO /usr/local/bin/bench get-app https://github.com/johnnzamba/Savanna-Farm-Suite --branch develop
+2026-05-08 11:39:46,571 LOG Getting Savanna-Farm-Suite
+2026-05-08 11:39:46,572 DEBUG cd ./apps && git clone https://github.com/johnnzamba/Savanna-Farm-Suite --branch develop --depth 1 --origin upstream
+2026-05-08 11:39:48,948 LOG Installing farm_management_system
+2026-05-08 11:39:48,949 DEBUG cd /home/ivy/frappe-bench && /home/ivy/frappe-bench/env/bin/python -m pip install --quiet --upgrade -e /home/ivy/frappe-bench/apps/farm_management_system 
+2026-05-08 11:39:51,919 DEBUG bench build --app farm_management_system
+2026-05-08 11:39:52,165 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-08 11:39:55,485 DEBUG cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe:
+2026-05-08 11:39:55,777 WARNING cd /home/ivy/frappe-bench && sudo supervisorctl restart frappe: executed with exit code 2
+2026-05-08 11:39:55,778 WARNING restarting supervisor group `frappe:` failed. Use `bench restart` to retry.
+2026-05-08 11:39:56,601 INFO A newer version of bench is available: 5.23.0 → 5.29.1
+2026-05-08 11:40:23,301 INFO /usr/local/bin/bench install-app farm_management_system
+2026-05-08 11:41:47,153 INFO /usr/local/bin/bench --site farm_management_system install-app farm_management_system
+2026-05-08 11:43:13,638 INFO /usr/local/bin/bench new-site farm.local
+2026-05-08 11:44:27,499 INFO /usr/local/bin/bench new-site farm.local
+2026-05-08 11:44:36,407 INFO /usr/local/bin/bench --site farm.local install-app erpnext
+2026-05-08 11:47:58,112 INFO /usr/local/bin/bench start
+2026-05-08 11:47:58,510 INFO /usr/local/bin/bench watch
+2026-05-08 11:47:58,519 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 11:47:58,521 INFO /usr/local/bin/bench schedule
+2026-05-08 11:47:58,529 INFO /usr/local/bin/bench worker
+2026-05-08 11:48:12,541 INFO /usr/local/bin/bench --site farm.local install-app erpnext
+2026-05-08 11:48:31,828 INFO /usr/local/bin/bench --site farm.local install-app farm_management_system
+2026-05-08 11:51:43,361 INFO /usr/local/bin/bench start
+2026-05-08 11:52:52,643 INFO /usr/local/bin/bench start
+2026-05-08 11:54:18,294 INFO /usr/local/bin/bench start
+2026-05-08 11:54:18,612 INFO /usr/local/bin/bench schedule
+2026-05-08 11:54:18,634 INFO /usr/local/bin/bench watch
+2026-05-08 11:54:18,642 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 11:54:18,673 INFO /usr/local/bin/bench worker
+2026-05-08 11:55:38,687 INFO /usr/local/bin/bench start
+2026-05-08 11:55:39,033 INFO /usr/local/bin/bench worker
+2026-05-08 11:55:39,034 INFO /usr/local/bin/bench watch
+2026-05-08 11:55:39,124 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 11:55:39,134 INFO /usr/local/bin/bench schedule
+2026-05-08 11:57:45,891 INFO /usr/local/bin/bench start
+2026-05-08 11:57:46,243 INFO /usr/local/bin/bench watch
+2026-05-08 11:57:46,243 INFO /usr/local/bin/bench worker
+2026-05-08 11:57:46,245 INFO /usr/local/bin/bench schedule
+2026-05-08 11:57:46,355 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 11:58:58,981 INFO /usr/local/bin/bench use farm.local
+2026-05-08 12:00:01,499 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-08 12:00:02,372 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-08 12:00:04,155 INFO /usr/local/bin/bench --site farm.local reload-doc
+2026-05-08 12:00:42,359 INFO /usr/local/bin/bench use farm.local
+2026-05-08 12:02:36,215 INFO /usr/local/bin/bench start
+2026-05-08 12:02:36,538 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 12:02:36,549 INFO /usr/local/bin/bench worker
+2026-05-08 12:02:36,580 INFO /usr/local/bin/bench schedule
+2026-05-08 12:02:36,609 INFO /usr/local/bin/bench watch
+2026-05-08 12:04:06,846 INFO /usr/local/bin/bench set-default-site farm.local
+2026-05-08 12:04:23,933 INFO /usr/local/bin/bench use farm.local
+2026-05-08 12:06:37,217 INFO /usr/local/bin/bench set-admin-passwd 1234
+2026-05-08 12:08:24,539 INFO /usr/local/bin/bench --site farm.local set-admin-passwd 1234
+2026-05-08 12:09:03,747 INFO /usr/local/bin/bench --site farm.local set-admin-password 1234
+2026-05-08 12:13:30,157 INFO /usr/local/bin/bench --site farm.local restore-backup /home/ivy/home/ivy/Downloads/wairykim dump/restore/20260508_112714-wairykim_techsavanna_technology-database.sql.gz --with-files
+2026-05-08 12:15:03,775 INFO /usr/local/bin/bench --site farm.local restore /home/ivy/Downloads/wairykim dump/20260508_112714-wairykim_techsavanna_technology-database.sql.gz --with-public-files /home/ivy/Downloads/wairykim dump/20260508_112714-wairykim_techsavanna_technology-files.tar --with-private-files /home/ivy/Downloads/wairykim dump/20260508_112714-wairykim_techsavanna_technology-private-files.tar
+2026-05-08 12:15:20,608 INFO /usr/local/bin/bench --site farm.local restore /home/ivy/Downloads/wairykim dump/20260508_112714-wairykim_techsavanna_technology-database.sql.gz
+2026-05-08 12:16:03,478 INFO /usr/local/bin/bench --site farm.local restore 20260508_112714-wairykim_techsavanna_technology-database.sql.gz --with-public-files 20260508_112714-wairykim_techsavanna_technology-files.tar --with-private-files 20260508_112714-wairykim_techsavanna_technology-private-files.tar
+2026-05-08 12:17:21,473 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-08 12:17:44,029 INFO /usr/local/bin/bench start
+2026-05-08 12:17:44,504 INFO /usr/local/bin/bench watch
+2026-05-08 12:17:44,523 INFO /usr/local/bin/bench worker
+2026-05-08 12:17:44,529 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 12:17:44,547 INFO /usr/local/bin/bench schedule
+2026-05-08 12:18:56,009 INFO /usr/local/bin/bench --site farm.local list-apps
+2026-05-08 12:20:02,628 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-08 12:21:12,842 INFO /usr/local/bin/bench pip install py-multiavatar
+2026-05-08 12:21:40,225 INFO /usr/local/bin/bench --site farm.local restore /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-database.sql.gz --with-public-files /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-files.tar --with-private-files /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-private-files.tar
+2026-05-08 12:23:01,115 INFO /usr/local/bin/bench pip install multiavatar
+2026-05-08 12:23:47,630 INFO /usr/local/bin/bench --site farm.local restore /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-database.sql.gz --with-public-files /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-files.tar --with-private-files /home/ivy/Downloads/wairykim_dump/20260508_112714-wairykim_techsavanna_technology-private-files.tar
+2026-05-08 12:25:18,910 INFO /usr/local/bin/bench start
+2026-05-08 12:25:19,377 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 12:25:19,419 INFO /usr/local/bin/bench schedule
+2026-05-08 12:25:19,450 INFO /usr/local/bin/bench watch
+2026-05-08 12:25:19,465 INFO /usr/local/bin/bench worker
+2026-05-08 12:34:08,795 INFO /usr/local/bin/bench start
+2026-05-08 12:34:09,347 INFO /usr/local/bin/bench watch
+2026-05-08 12:34:09,368 INFO /usr/local/bin/bench schedule
+2026-05-08 12:34:09,388 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 12:34:09,398 INFO /usr/local/bin/bench worker
+2026-05-08 14:31:36,175 INFO /usr/local/bin/bench start
+2026-05-08 14:31:36,671 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 14:31:36,684 INFO /usr/local/bin/bench watch
+2026-05-08 14:31:36,695 INFO /usr/local/bin/bench schedule
+2026-05-08 14:31:36,709 INFO /usr/local/bin/bench worker
+2026-05-08 14:51:20,099 INFO /usr/local/bin/bench migrate
+2026-05-08 14:55:19,060 INFO /usr/local/bin/bench clear-cache
+2026-05-08 14:55:36,752 INFO /usr/local/bin/bench build
+2026-05-08 15:04:59,308 INFO /usr/local/bin/bench migrate
+2026-05-08 15:24:50,039 INFO /usr/local/bin/bench migrate
+2026-05-08 15:40:24,418 INFO /usr/local/bin/bench start
+2026-05-08 15:40:25,290 INFO /usr/local/bin/bench serve --port 8000
+2026-05-08 15:40:25,323 INFO /usr/local/bin/bench schedule
+2026-05-08 15:40:25,335 INFO /usr/local/bin/bench worker
+2026-05-08 15:40:25,345 INFO /usr/local/bin/bench watch
+2026-05-08 15:40:33,613 INFO /usr/local/bin/bench migrate
+2026-05-09 10:01:56,723 INFO /usr/local/bin/bench start
+2026-05-09 10:01:57,374 INFO /usr/local/bin/bench watch
+2026-05-09 10:01:57,391 INFO /usr/local/bin/bench serve --port 8000
+2026-05-09 10:01:57,423 INFO /usr/local/bin/bench worker
+2026-05-09 10:01:57,505 INFO /usr/local/bin/bench schedule
+2026-05-09 10:29:33,906 INFO /usr/local/bin/bench migrate
+2026-05-09 12:00:01,760 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-09 12:07:35,519 INFO /usr/local/bin/bench migrate
+2026-05-09 18:00:01,403 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-11 09:19:46,519 INFO /usr/local/bin/bench start
+2026-05-11 09:19:47,453 INFO /usr/local/bin/bench worker
+2026-05-11 09:19:47,460 INFO /usr/local/bin/bench schedule
+2026-05-11 09:19:47,472 INFO /usr/local/bin/bench serve --port 8000
+2026-05-11 09:19:47,488 INFO /usr/local/bin/bench watch
+2026-05-11 09:36:12,298 INFO /usr/local/bin/bench migrate
+2026-05-11 09:38:51,339 INFO /usr/local/bin/bench migrate
+2026-05-11 09:41:16,401 INFO /usr/local/bin/bench migrate
+2026-05-11 09:43:34,883 INFO /usr/local/bin/bench migrate
+2026-05-11 10:01:05,367 INFO /usr/local/bin/bench migrate
+2026-05-11 10:05:22,893 INFO /usr/local/bin/bench migrate
+2026-05-11 10:11:55,140 INFO /usr/local/bin/bench migrate
+2026-05-11 10:13:46,243 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-11 10:14:22,982 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-11 10:28:41,057 INFO /usr/local/bin/bench migrate
+2026-05-11 10:42:17,556 INFO /usr/local/bin/bench migrate
+2026-05-11 10:45:05,103 INFO /usr/local/bin/bench migrate
+2026-05-11 10:55:29,287 INFO /usr/local/bin/bench migrate
+2026-05-11 12:00:01,615 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-11 13:00:50,105 INFO /usr/local/bin/bench migrate
+2026-05-11 13:06:24,669 INFO /usr/local/bin/bench migrate
+2026-05-11 14:23:41,344 INFO /usr/local/bin/bench migrate
+2026-05-11 14:44:36,255 INFO /usr/local/bin/bench migrate
+2026-05-11 14:51:32,241 INFO /usr/local/bin/bench migrate
+2026-05-12 11:10:30,605 INFO /usr/local/bin/bench migrate
+2026-05-12 11:10:46,214 INFO /usr/local/bin/bench start
+2026-05-12 11:10:46,945 INFO /usr/local/bin/bench serve --port 8000
+2026-05-12 11:10:46,952 INFO /usr/local/bin/bench watch
+2026-05-12 11:10:46,968 INFO /usr/local/bin/bench schedule
+2026-05-12 11:10:47,017 INFO /usr/local/bin/bench worker
+2026-05-12 11:11:01,708 INFO /usr/local/bin/bench migrate
+2026-05-12 11:23:07,825 INFO /usr/local/bin/bench migrate
+2026-05-12 11:52:57,995 INFO /usr/local/bin/bench migrate
+2026-05-12 11:56:55,997 INFO /usr/local/bin/bench migrate
+2026-05-12 12:00:02,649 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-12 12:15:41,305 INFO /usr/local/bin/bench start
+2026-05-12 12:15:42,410 INFO /usr/local/bin/bench serve --port 8000
+2026-05-12 12:15:42,423 INFO /usr/local/bin/bench watch
+2026-05-12 12:15:42,459 INFO /usr/local/bin/bench worker
+2026-05-12 12:15:42,471 INFO /usr/local/bin/bench schedule
+2026-05-12 12:15:50,193 INFO /usr/local/bin/bench migrate
+2026-05-12 12:26:41,418 INFO /usr/local/bin/bench migrate
+2026-05-12 12:27:08,646 INFO /usr/local/bin/bench console
+2026-05-12 12:28:16,035 INFO /usr/local/bin/bench clear-cache
+2026-05-13 09:47:55,843 INFO /usr/local/bin/bench start
+2026-05-13 09:47:57,446 INFO /usr/local/bin/bench serve --port 8000
+2026-05-13 09:47:57,523 INFO /usr/local/bin/bench watch
+2026-05-13 09:47:57,650 INFO /usr/local/bin/bench schedule
+2026-05-13 09:47:57,663 INFO /usr/local/bin/bench worker
+2026-05-13 09:48:06,521 INFO /usr/local/bin/bench migrate
+2026-05-13 09:56:05,331 INFO /usr/local/bin/bench migrate
+2026-05-13 09:57:24,000 INFO /usr/local/bin/bench migrate
+2026-05-13 10:10:41,370 INFO /usr/local/bin/bench migrate
+2026-05-13 10:13:06,004 INFO /usr/local/bin/bench migrate
+2026-05-13 10:16:49,540 INFO /usr/local/bin/bench migrate
+2026-05-13 11:39:30,082 INFO /usr/local/bin/bench migrate
+2026-05-13 11:45:34,078 INFO /usr/local/bin/bench migrate
+2026-05-13 11:49:31,246 INFO /usr/local/bin/bench migrate
+2026-05-13 11:57:39,598 INFO /usr/local/bin/bench migrate
+2026-05-13 12:00:02,105 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-13 12:02:31,789 INFO /usr/local/bin/bench migrate
+2026-05-13 12:26:38,712 INFO /usr/local/bin/bench migrate
+2026-05-13 12:28:05,039 INFO /usr/local/bin/bench migrate
+2026-05-13 12:31:36,042 INFO /usr/local/bin/bench migrate
+2026-05-13 12:37:18,430 INFO /usr/local/bin/bench migrate
+2026-05-13 12:39:27,590 INFO /usr/local/bin/bench migrate
+2026-05-14 11:58:07,480 INFO /usr/local/bin/bench start
+2026-05-14 11:58:08,174 INFO /usr/local/bin/bench schedule
+2026-05-14 11:58:08,186 INFO /usr/local/bin/bench watch
+2026-05-14 11:58:08,200 INFO /usr/local/bin/bench worker
+2026-05-14 11:58:08,201 INFO /usr/local/bin/bench serve --port 8000
+2026-05-14 11:58:15,425 INFO /usr/local/bin/bench migrate
+2026-05-14 12:00:04,735 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-14 12:11:26,731 INFO /usr/local/bin/bench migrate
+2026-05-14 12:12:12,455 INFO /usr/local/bin/bench --site farm.local console -c import frappe; doctype_list = ['Packaging Item', 'Product Packaging Config', 'Packaging Collection', 'Packaging Collection Item']; [print(f'{dt}: {"✓" if frappe.db.exists("DocType", dt) else "✗"}') for dt in doctype_list]
+2026-05-14 12:28:19,927 INFO /usr/local/bin/bench --site farm.local execute import frappe; print(frappe.db.exists("Page","Packaging Management")); print(frappe.db.exists("Page","packaging-management")); print(frappe.db.count("Page", {"name":["like","%packaging%"]}))
+2026-05-14 12:30:44,945 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 12:35:34,327 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:18:43,638 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-14 13:23:21,515 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 13:23:36,427 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "DocType", "filters": {"name": ["in", ["Packaging Item", "Packaging Item Purchase", "Product Packaging Config", "Packaging Collection", "Packaging Collection Item"]]}, "fields": ["name", "is_submittable"]}
+2026-05-14 13:24:04,478 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "filters": {"module": "Savanna Farm Suite"}, "fields": ["name", "label", "title"]}
+2026-05-14 13:24:16,855 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "label", "module"], "limit_page_length": 100}
+2026-05-14 13:24:28,859 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get --kwargs {"doctype": "Workspace", "name": "Farm Management System"}
+2026-05-14 13:24:41,264 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get --kwargs {"doctype": "Workspace", "name": "Farm Management System"}
+2026-05-14 13:25:00,007 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace Link", "filters": {"parent": "Farm Management System", "label": ["like", "%Packag%"]}, "fields": ["name", "label", "link_to", "type", "idx"]}
+2026-05-14 13:25:19,020 INFO /usr/local/bin/bench --site farm.local execute /tmp/add_packaging_workspace.py
+2026-05-14 13:25:40,253 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:25:55,579 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:26:11,722 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:26:21,122 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:27:15,826 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 13:27:23,637 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-14 13:27:34,575 INFO /usr/local/bin/bench restart
+2026-05-14 13:27:35,095 WARNING /usr/local/bin/bench restart executed with exit code 1
+2026-05-14 13:27:36,145 INFO A newer version of bench is available: 5.23.0 → 5.29.1
+2026-05-14 13:27:51,102 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:28:19,468 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:44:20,170 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:44:32,836 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:44:46,349 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:44:57,867 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_value --kwargs {"doctype": "Workspace", "filters": {"name": "Farm Management System"}, "fieldname": "content"}
+2026-05-14 13:45:14,393 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:45:38,912 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_value --kwargs {"doctype": "Workspace", "filters": {"name": "Farm Management System"}, "fieldname": "content"}
+2026-05-14 13:45:46,173 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 13:46:03,781 INFO /usr/local/bin/bench migrate
+2026-05-14 13:47:44,075 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-14 13:48:50,909 INFO /usr/local/bin/bench migrate
+2026-05-14 13:57:11,673 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:57:21,185 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:58:40,523 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:58:53,374 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:59:02,049 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 13:59:12,268 INFO /usr/local/bin/bench migrate
+2026-05-14 14:06:51,823 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-14 14:07:19,542 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 14:07:29,365 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-14 14:07:57,039 INFO /usr/local/bin/bench migrate
+2026-05-14 14:12:09,807 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-14 14:12:40,194 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 14:12:43,813 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-14 14:13:47,748 INFO /usr/local/bin/bench migrate
+2026-05-14 14:16:43,919 INFO /usr/local/bin/bench --site farm.local console
+2026-05-14 14:17:16,605 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 14:18:06,927 INFO /usr/local/bin/bench migrate
+2026-05-14 14:45:32,836 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-14 14:45:56,635 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-14 14:45:58,611 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-14 14:46:12,367 INFO /usr/local/bin/bench --site farm.local console
+2026-05-15 09:05:00,180 INFO /usr/local/bin/bench start
+2026-05-15 09:05:00,847 INFO /usr/local/bin/bench watch
+2026-05-15 09:05:00,852 INFO /usr/local/bin/bench serve --port 8000
+2026-05-15 09:05:00,935 INFO /usr/local/bin/bench worker
+2026-05-15 09:05:00,953 INFO /usr/local/bin/bench schedule
+2026-05-15 09:11:57,954 INFO /usr/local/bin/bench migrate
+2026-05-15 09:28:18,124 INFO /usr/local/bin/bench migrate
+2026-05-15 09:31:12,180 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': 'SELECT name, public, module FROM tabWorkspace ORDER BY public DESC, sequence_id ASC'}
+2026-05-15 09:31:38,215 INFO /usr/local/bin/bench --site farm.local execute frappe.get_meta --kwargs {'doctype': 'Packaging Collection'}
+2026-05-15 09:31:42,065 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': 'SELECT name FROM tabDocType WHERE name="Product Packaging Config"'}
+2026-05-15 09:31:57,752 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': 'SELECT module FROM \`tabBlock Module\` WHERE parent="samsaf674@gmail.com"'}
+2026-05-15 09:32:08,852 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': 'SELECT name, module_profile, default_workspace FROM tabUser WHERE name="samsaf674@gmail.com"'}
+2026-05-15 09:32:12,735 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': 'SELECT DISTINCT role FROM \`tabHas Role\` WHERE parent="samsaf674@gmail.com" ORDER BY role'}
+2026-05-15 09:32:33,560 INFO /usr/local/bin/bench --site farm.local execute frappe.utils.execute_in_shell --kwargs {"cmd": "echo skip"}
+2026-05-15 09:32:34,852 INFO /usr/local/bin/bench --site farm.local console
+2026-05-15 09:32:55,526 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "User", "filters": {"enabled": 1}, "fields": ["name", "module_profile"]}
+2026-05-15 09:33:06,504 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Block Module", "fields": ["parent", "parenttype", "module"], "limit_page_length": 200}
+2026-05-15 09:33:09,237 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Has Role", "filters": {"parent": "wairykimfarmsagana@gmail.com"}, "fields": ["role"], "limit_page_length": 100}
+2026-05-15 09:33:11,894 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "public", "for_user", "module", "is_hidden", "parent_page", "restrict_to_domain"], "limit_page_length": 50}
+2026-05-15 09:33:36,618 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "is_hidden", "modified"], "filters": {"is_hidden": 1}, "order_by": "modified desc", "limit_page_length": 50}
+2026-05-15 09:34:36,527 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "UPDATE tabWorkspace SET is_hidden=0 WHERE is_hidden=1"}
+2026-05-15 09:34:37,497 INFO /usr/local/bin/bench --site farm.local execute frappe.db.commit
+2026-05-15 09:34:38,441 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-15 09:34:47,621 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "is_hidden"], "filters": {"is_hidden": 1}, "limit_page_length": 50}
+2026-05-15 09:34:54,659 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_count --kwargs {"doctype": "Workspace", "filters": {"is_hidden": 0}}
+2026-05-15 09:35:12,700 INFO /usr/local/bin/bench migrate
+2026-05-15 09:37:52,087 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "SHOW TABLES LIKE \"tabProduct Packaging Config\""}
+2026-05-15 09:37:53,084 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "SELECT COUNT(*) FROM `tabProduct Packaging Config`"}
+2026-05-15 09:45:28,228 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "UPDATE tabWorkspace SET is_hidden=1 WHERE name IN (\"Assets\",\"Build\",\"Buying\",\"CRM\",\"ERPNext Integrations\",\"ERPNext Settings\",\"Integrations\",\"Manufacturing\",\"Projects\",\"Quality\",\"Selling\",\"Stock\",\"Support\",\"Tools\",\"Users\",\"Website\")"}
+2026-05-15 09:45:29,613 INFO /usr/local/bin/bench --site farm.local execute frappe.db.commit
+2026-05-15 09:45:30,638 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-15 09:45:45,185 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "is_hidden"], "limit_page_length": 50, "order_by": "is_hidden DESC, name ASC"}
+2026-05-15 09:46:01,483 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-15 09:46:38,753 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --kwargs {"doctype": "DocType", "name": "Product Packaging Config"}
+2026-05-15 09:46:40,081 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --kwargs {"doctype": "Page", "name": "packaging-management"}
+2026-05-15 09:46:56,534 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType", "Product Packaging Config"]
+2026-05-15 09:46:57,499 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["Page", "packaging-management"]
+2026-05-15 09:48:02,595 INFO /usr/local/bin/bench migrate
+2026-05-15 10:05:12,864 INFO /usr/local/bin/bench migrate
+2026-05-15 10:08:42,576 INFO /usr/local/bin/bench --site farm.local execute frappe.delete_doc --args ["DocType", "Product Packaging Config"] --kwargs {"force": 1, "ignore_missing": true}
+2026-05-15 10:08:49,734 INFO /usr/local/bin/bench --site farm.local execute frappe.delete_doc --args ["Page", "packaging-management"] --kwargs {"force": 1, "ignore_missing": true}
+2026-05-15 10:09:03,049 INFO /usr/local/bin/bench --site farm.local execute frappe.delete_doc --args ["DocType", "Product Packaging Config"] --kwargs {"force": 1, "ignore_missing": True}
+2026-05-15 10:09:07,056 INFO /usr/local/bin/bench --site farm.local execute frappe.delete_doc --args ["Page", "packaging-management"] --kwargs {"force": 1, "ignore_missing": True}
+2026-05-15 10:09:18,016 INFO /usr/local/bin/bench --site farm.local execute frappe.db.commit
+2026-05-15 10:09:19,446 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType", "Product Packaging Config"]
+2026-05-15 10:09:20,510 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["Page", "packaging-management"]
+2026-05-15 10:09:21,445 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "SHOW TABLES LIKE \"tabProduct Packaging Config\""}
+2026-05-15 10:09:33,353 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "DROP TABLE IF EXISTS \`tabProduct Packaging Config\`"}
+2026-05-15 10:09:34,366 INFO /usr/local/bin/bench --site farm.local execute frappe.db.commit
+2026-05-15 10:09:35,321 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {"query": "SHOW TABLES LIKE \"tabProduct Packaging Config\""}
+2026-05-15 10:09:53,681 INFO /usr/local/bin/bench --site farm.local execute frappe.utils.execute_script --kwargs {'script': open('/tmp/drop_ppc.py').read()}
+2026-05-15 10:10:00,746 INFO /usr/local/bin/bench --site farm.local console
+2026-05-15 10:14:03,479 INFO /usr/local/bin/bench migrate
+2026-05-15 10:14:57,151 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-15 10:15:20,117 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-15 10:15:22,005 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType", "Product Packaging Config"]
+2026-05-15 10:15:23,401 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["Page", "packaging-management"]
+2026-05-15 10:15:51,939 INFO /usr/local/bin/bench migrate
+2026-05-15 10:18:52,853 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {"doctype": "Workspace", "fields": ["name", "is_hidden", "modified"], "limit_page_length": 50, "order_by": "is_hidden DESC, name ASC"}
+2026-05-15 10:25:21,892 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-15 10:25:50,951 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-15 10:25:52,922 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType", "Product Packaging Config"]
+2026-05-15 10:25:54,278 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["Page", "packaging-management"]
+2026-05-15 10:27:13,438 INFO /usr/local/bin/bench migrate
+2026-05-15 10:55:13,687 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-15 10:55:38,897 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-15 10:55:41,049 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.packaging_collection.packaging_collection.get_packaged_product_summary
+2026-05-15 10:55:58,564 INFO /usr/local/bin/bench --site farm.local execute frappe.get_meta --args ["Packaging Collection Item"]
+2026-05-15 10:56:07,644 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_count --kwargs {"doctype": "DocField", "filters": {"parent": "Packaging Collection Item", "fieldname": "packaged_item"}}
+2026-05-15 10:56:43,496 INFO /usr/local/bin/bench migrate
+2026-05-20 11:12:42,963 INFO /usr/local/bin/bench start
+2026-05-20 11:12:43,806 INFO /usr/local/bin/bench worker
+2026-05-20 11:12:43,833 INFO /usr/local/bin/bench serve --port 8000
+2026-05-20 11:12:43,851 INFO /usr/local/bin/bench watch
+2026-05-20 11:12:43,901 INFO /usr/local/bin/bench schedule
+2026-05-20 11:14:46,302 INFO /usr/local/bin/bench migrate
+2026-05-20 11:39:49,164 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-20 11:40:23,084 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_list --kwargs {'doctype': 'Report', 'filters': {'module': 'Savanna Farm Suite', 'name': ['like', '%Packaging%']}, 'fields': ['name','ref_doctype','report_type']}
+2026-05-20 11:40:31,732 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_value --kwargs {'doctype': 'DocField', 'filters': {'parent': 'Poultry Batch Blocks', 'fieldname': 'poultry_shed'}, 'fieldname': 'idx'}
+2026-05-20 11:40:39,115 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT fieldname, idx FROM `tabDocField` WHERE parent='Poultry Batch Blocks' ORDER BY idx"}
+2026-05-20 11:40:45,409 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 11:43:53,645 INFO /usr/local/bin/bench migrate
+2026-05-20 12:04:44,827 INFO /usr/local/bin/bench start
+2026-05-20 12:04:45,890 INFO /usr/local/bin/bench watch
+2026-05-20 12:04:45,938 INFO /usr/local/bin/bench serve --port 8000
+2026-05-20 12:04:45,977 INFO /usr/local/bin/bench schedule
+2026-05-20 12:04:46,076 INFO /usr/local/bin/bench worker
+2026-05-20 12:10:30,872 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-20 12:11:00,924 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:16:18,873 INFO /usr/local/bin/bench migrate
+2026-05-20 12:21:36,100 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:21:39,931 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.poultry_batches.poultry_batches._resolve_batch_for_shed --args ["Test Shed"]
+2026-05-20 12:26:48,828 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-20 12:27:13,152 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:27:28,225 INFO /usr/local/bin/bench --site farm.local execute frappe.client.get_value --kwargs {'doctype':'Report','filters':{'name':'Poultry Production Report'},'fieldname':['name','ref_doctype','report_type','module']}
+2026-05-20 12:34:24,896 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT name FROM `tabWorkspace` WHERE module LIKE '%Savanna%' OR name LIKE '%Farm%' OR name LIKE '%Savanna%'"}
+2026-05-20 12:34:34,718 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT label, type, link_type, link_to FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND (label LIKE '%Production%' OR link_to LIKE '%Production%') ORDER BY idx"}
+2026-05-20 12:34:43,679 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label, type, link_type, link_to, hidden FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND idx BETWEEN (SELECT idx FROM (SELECT idx FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND link_to='Pig Production Report') t) - 2 AND (SELECT idx FROM (SELECT idx FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND link_to='Rabbit Production Report') t) + 4 ORDER BY idx"}
+2026-05-20 12:35:03,955 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label, type, link_type, link_to, hidden FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND idx BETWEEN 50 AND 65 ORDER BY idx"}
+2026-05-20 12:36:24,578 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT COUNT(*) FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND link_to='Poultry Production Report'"}
+2026-05-20 12:36:46,472 INFO /usr/local/bin/bench --site farm.local execute frappe.utils.file_lock.delete_lock --args ['frappe.lock']
+2026-05-20 12:36:47,463 INFO /usr/local/bin/bench --site farm.local console
+2026-05-20 12:36:59,124 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND link_to='Poultry Production Report'"}
+2026-05-20 12:37:23,832 INFO /usr/local/bin/bench --site farm.local console
+2026-05-20 12:37:32,364 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label, link_to FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND idx BETWEEN 56 AND 62 ORDER BY idx"}
+2026-05-20 12:37:33,346 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:41:45,089 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:44:21,020 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:56:56,315 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.packaging_collection.packaging_collection.get_packaged_product_summary
+2026-05-20 12:58:36,681 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-20 12:58:52,952 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 12:59:01,976 INFO /usr/local/bin/bench --site farm.local execute frappe.db.get_value --kwargs {'doctype':'Page','filters':{'name':'sell-packaged-products'},'fieldname':['name','title','module']}
+2026-05-20 12:59:15,150 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label, link_to FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND (label LIKE '%Packag%' OR link_to LIKE '%packaging%') ORDER BY idx"}
+2026-05-20 12:59:37,707 INFO /usr/local/bin/bench --site farm.local console
+2026-05-20 12:59:45,884 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx, label, link_to, link_type FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND idx BETWEEN 6 AND 12 ORDER BY idx"}
+2026-05-20 12:59:46,862 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 14:03:40,427 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT name, IF(content IS NULL,'NULL',CONCAT('len=',CHAR_LENGTH(content))) AS content_len, IF(script IS NULL,'NULL',CONCAT('len=',CHAR_LENGTH(script))) AS script_len FROM `tabPage` WHERE name IN ('packaging-management','sell-packaged-products')"}
+2026-05-20 14:03:48,534 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabPage`"}
+2026-05-20 14:04:50,210 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 14:04:51,899 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-20 14:11:25,440 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabCompany` LIKE '%warehouse%'"}
+2026-05-20 14:11:33,012 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT name FROM `tabSingles` WHERE doctype='Stock Settings' AND field='default_warehouse'"}
+2026-05-20 14:11:39,840 INFO /usr/local/bin/bench --site farm.local execute frappe.db.get_single_value --args ["Stock Settings","default_warehouse"]
+2026-05-20 14:12:03,882 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-20 14:12:06,525 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse
+2026-05-20 14:13:41,592 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-21 11:45:33,473 INFO /usr/local/bin/bench start
+2026-05-21 11:45:33,780 INFO /usr/local/bin/bench watch
+2026-05-21 11:45:33,792 INFO /usr/local/bin/bench serve --port 8000
+2026-05-21 11:45:33,835 INFO /usr/local/bin/bench worker
+2026-05-21 11:45:33,837 INFO /usr/local/bin/bench schedule

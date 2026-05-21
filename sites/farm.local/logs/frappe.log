@@ -1,0 +1,30 @@
+2026-05-09 12:08:53,346 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'report_name': 'Cow Production Report', 'filters': '{"timeline":"This Month"}', 'ignore_prepared_report': '1', 'cmd': 'frappe.desk.query_report.run'}
+2026-05-11 09:41:54,094 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'doctype': 'Poultry Batches', 'name': 'BATCH-2026/02/002', 'cmd': 'frappe.desk.form.load.getdoc'}
+2026-05-11 09:42:25,424 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'doctype': 'Poultry Batches', 'name': 'BATCH-2026/02/002', 'cmd': 'frappe.desk.form.load.getdoc'}
+2026-05-11 14:45:16,898 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'doctype': 'Poultry Batches', 'with_parent': '1', 'cached_timestamp': '2026-05-11 09:43:46.061415', 'cmd': 'frappe.desk.form.load.getdoctype'}
+2026-05-11 14:46:03,502 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'doctype': 'Poultry Batches', 'with_parent': '1', 'cached_timestamp': '2026-05-11 09:43:46.061415', 'cmd': 'frappe.desk.form.load.getdoctype'}
+2026-05-11 14:46:55,560 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'doctype': 'Poultry Batches', 'with_parent': '1', 'cached_timestamp': '2026-05-11 09:43:46.061415', 'cmd': 'frappe.desk.form.load.getdoctype'}
+2026-05-20 14:05:19,646 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse'}
+2026-05-20 14:05:29,326 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse'}
+2026-05-20 14:10:13,711 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse'}
+2026-05-20 14:11:11,925 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse'}

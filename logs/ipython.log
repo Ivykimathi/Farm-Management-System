@@ -1,0 +1,438 @@
+2026-05-14 12:30:47,320 INFO ipython === bench console session ===
+2026-05-14 12:30:47,320 INFO ipython import frappe
+2026-05-14 12:30:47,321 INFO ipython print(frappe.db.exists('Page','Packaging Management'))
+2026-05-14 12:30:47,321 INFO ipython print(frappe.db.exists('Page','packaging-management'))
+2026-05-14 12:30:47,321 INFO ipython print(frappe.db.count('Page', {'name':['like','%packaging%']}))
+2026-05-14 12:30:47,322 INFO ipython === session end ===
+2026-05-14 12:35:36,869 INFO ipython === bench console session ===
+2026-05-14 12:35:36,872 INFO ipython import frappe
+2026-05-14 12:35:36,872 INFO ipython === session end ===
+2026-05-14 13:25:42,954 INFO ipython === bench console session ===
+2026-05-14 13:25:42,956 INFO ipython import frappe
+2026-05-14 13:25:42,957 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:25:42,957 INFO ipython existing_labels = {l.label for l in ws.links}
+2026-05-14 13:25:42,957 INFO ipython if "Packaging Module" in existing_labels:
+    print("Already added")
+else:
+    ws.append("links", {"type": "Card Break", "label": "Packaging Module",
+        "description": "Track packaging items, purchases and packaging collections",
+        "link_count": 5, "hidden": 0, "onboard": 0, "link_type": "DocType"})
+    ws.append("links", {"type": "Link", "label": "Packaging Items", "link_to": "Packaging Item",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Item Purchases", "link_to": "Packaging Item Purchase",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Product Packaging Config", "link_to": "Product Packaging Config",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Collections", "link_to": "Packaging Collection",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Management Hub", "link_to": "packaging-management",
+        "link_type": "Page", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+2026-05-14 13:25:42,957 INFO ipython     existing_shortcuts = {s.label for s in ws.shortcuts}
+2026-05-14 13:25:42,957 INFO ipython     for s in [
+        {"label": "Packaging Collection", "type": "DocType", "link_to": "Packaging Collection", "color": "Green"},
+        {"label": "Packaging Item", "type": "DocType", "link_to": "Packaging Item", "color": "Blue"},
+        {"label": "Packaging Item Purchase", "type": "DocType", "link_to": "Packaging Item Purchase", "color": "Orange"},
+    ]:
+        if s["label"] not in existing_shortcuts:
+            ws.append("shortcuts", s)
+2026-05-14 13:25:42,958 INFO ipython     ws.save(ignore_permissions=True)
+2026-05-14 13:25:42,958 INFO ipython     frappe.db.commit()
+2026-05-14 13:25:42,958 INFO ipython     print("OK links:", len(ws.links), "shortcuts:", len(ws.shortcuts))
+2026-05-14 13:25:42,958 INFO ipython === session end ===
+2026-05-14 13:25:56,753 INFO ipython === bench console session ===
+2026-05-14 13:25:56,753 INFO ipython import frappe
+2026-05-14 13:25:56,753 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:25:56,754 INFO ipython pkg_links = [(l.type, l.label, l.link_to) for l in ws.links if "ackag" in (l.label or "")]
+2026-05-14 13:25:56,754 INFO ipython pkg_shortcuts = [(s.label, s.link_to) for s in ws.shortcuts if "ackag" in (s.label or "")]
+2026-05-14 13:25:56,755 INFO ipython print("Packaging links:", pkg_links)
+2026-05-14 13:25:56,755 INFO ipython print("Packaging shortcuts:", pkg_shortcuts)
+2026-05-14 13:25:56,755 INFO ipython === session end ===
+2026-05-14 13:26:13,487 INFO ipython === bench console session ===
+2026-05-14 13:26:13,488 INFO ipython import frappe
+2026-05-14 13:26:13,488 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:26:13,489 INFO ipython existing_labels = {l.label for l in ws.links}
+2026-05-14 13:26:13,489 INFO ipython if "Packaging Module" not in existing_labels:
+    ws.append("links", {"type": "Card Break", "label": "Packaging Module",
+        "description": "Track packaging items, purchases and packaging collections",
+        "link_count": 5, "hidden": 0, "onboard": 0, "link_type": "DocType"})
+    ws.append("links", {"type": "Link", "label": "Packaging Items", "link_to": "Packaging Item",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Item Purchases", "link_to": "Packaging Item Purchase",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Product Packaging Config", "link_to": "Product Packaging Config",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Collections", "link_to": "Packaging Collection",
+        "link_type": "DocType", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+    ws.append("links", {"type": "Link", "label": "Packaging Management Hub", "link_to": "packaging-management",
+        "link_type": "Page", "hidden": 0, "onboard": 0, "is_query_report": 0, "link_count": 0})
+2026-05-14 13:26:13,489 INFO ipython existing_shortcuts = {s.label for s in ws.shortcuts}
+2026-05-14 13:26:13,489 INFO ipython for s in [
+    {"label": "Packaging Collection", "type": "DocType", "link_to": "Packaging Collection", "color": "Green"},
+    {"label": "Packaging Item", "type": "DocType", "link_to": "Packaging Item", "color": "Blue"},
+    {"label": "Packaging Item Purchase", "type": "DocType", "link_to": "Packaging Item Purchase", "color": "Orange"},
+]:
+    if s["label"] not in existing_shortcuts:
+        ws.append("shortcuts", s)
+2026-05-14 13:26:13,489 INFO ipython ws.flags.ignore_links = True
+2026-05-14 13:26:13,489 INFO ipython ws.flags.ignore_validate = True
+2026-05-14 13:26:13,490 INFO ipython ws.flags.ignore_mandatory = True
+2026-05-14 13:26:13,490 INFO ipython ws.save(ignore_permissions=True)
+2026-05-14 13:26:13,490 INFO ipython frappe.db.commit()
+2026-05-14 13:26:13,490 INFO ipython print("Saved. links:", len(ws.links), "shortcuts:", len(ws.shortcuts))
+2026-05-14 13:26:13,490 INFO ipython === session end ===
+2026-05-14 13:26:22,262 INFO ipython === bench console session ===
+2026-05-14 13:26:22,263 INFO ipython import frappe
+2026-05-14 13:26:22,263 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:26:22,263 INFO ipython pkg_links = [(l.type, l.label, l.link_to or "") for l in ws.links if "ackag" in (l.label or "")]
+2026-05-14 13:26:22,263 INFO ipython pkg_shortcuts = [(s.label, s.link_to) for s in ws.shortcuts if "ackag" in (s.label or "")]
+2026-05-14 13:26:22,264 INFO ipython print("Packaging links:")
+2026-05-14 13:26:22,264 INFO ipython for x in pkg_links: print(" -", x)
+2026-05-14 13:26:22,264 INFO ipython print("Packaging shortcuts:")
+2026-05-14 13:26:22,264 INFO ipython for x in pkg_shortcuts: print(" -", x)
+2026-05-14 13:26:22,265 INFO ipython === session end ===
+2026-05-14 13:27:53,714 INFO ipython === bench console session ===
+2026-05-14 13:27:53,715 INFO ipython import frappe
+2026-05-14 13:27:53,716 INFO ipython # Quick smoke test - create a packaging item and verify Item gets created
+2026-05-14 13:27:53,716 INFO ipython from farm_management_system.savanna_farm_suite.doctype.packaging_item.packaging_item import PACKAGING_ITEM_GROUP, ensure_packaging_item_group
+2026-05-14 13:27:53,717 INFO ipython # Verify item group exists or can be created
+2026-05-14 13:27:53,717 INFO ipython ensure_packaging_item_group()
+2026-05-14 13:27:53,717 INFO ipython print("Item Group exists:", frappe.db.exists("Item Group", PACKAGING_ITEM_GROUP))
+2026-05-14 13:27:53,717 INFO ipython # Try creating a packaging item if not exists
+2026-05-14 13:27:53,717 INFO ipython test_name = "Test Tray 2-Pack"
+2026-05-14 13:27:53,718 INFO ipython if not frappe.db.exists("Packaging Item", test_name):
+    pi = frappe.get_doc({
+        "doctype": "Packaging Item",
+        "packaging_item_name": test_name,
+        "capacity": 2,
+        "default_uom": "Nos"
+    })
+    pi.insert()
+    print("Created Packaging Item:", pi.name, "linked_item:", pi.linked_item)
+else:
+    pi = frappe.get_doc("Packaging Item", test_name)
+    print("Already exists:", pi.name, "linked_item:", pi.linked_item)
+2026-05-14 13:27:53,718 INFO ipython print("Linked Item in DB:", frappe.db.exists("Item", pi.linked_item))
+2026-05-14 13:27:53,718 INFO ipython print("Stock UOM:", frappe.db.get_value("Item", pi.linked_item, "stock_uom"))
+2026-05-14 13:27:53,718 INFO ipython frappe.db.commit()
+2026-05-14 13:27:53,718 INFO ipython === session end ===
+2026-05-14 13:28:21,027 INFO ipython === bench console session ===
+2026-05-14 13:28:21,027 INFO ipython import frappe
+2026-05-14 13:28:21,027 INFO ipython # Clean up the smoke test item
+2026-05-14 13:28:21,028 INFO ipython if frappe.db.exists("Packaging Item", "Test Tray 2-Pack"):
+    frappe.delete_doc("Packaging Item", "Test Tray 2-Pack", force=1)
+    print("Deleted Packaging Item")
+if frappe.db.exists("Item", "PKG-Test Tray 2-Pack"):
+    frappe.delete_doc("Item", "PKG-Test Tray 2-Pack", force=1)
+    print("Deleted backing Item")
+frappe.db.commit()
+2026-05-14 13:28:21,028 INFO ipython === session end ===
+2026-05-14 13:44:22,068 INFO ipython === bench console session ===
+2026-05-14 13:44:22,070 INFO ipython import frappe
+2026-05-14 13:44:22,070 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:44:22,070 INFO ipython print("public:", ws.public, "for_user:", ws.for_user)
+2026-05-14 13:44:22,071 INFO ipython print("Total links:", len(ws.links))
+2026-05-14 13:44:22,071 INFO ipython print()
+2026-05-14 13:44:22,071 INFO ipython print("Last 10 links (by idx):")
+2026-05-14 13:44:22,072 INFO ipython for l in sorted(ws.links, key=lambda x: x.idx)[-10:]:
+    print(f"  idx={l.idx} type={l.type} label={l.label!r} link_to={l.link_to!r} hidden={l.hidden}")
+print()
+2026-05-14 13:44:22,072 INFO ipython print("Shortcuts:")
+2026-05-14 13:44:22,072 INFO ipython === session end ===
+2026-05-14 13:44:34,178 INFO ipython === bench console session ===
+2026-05-14 13:44:34,179 INFO ipython import frappe, json
+2026-05-14 13:44:34,179 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:44:34,179 INFO ipython content = ws.content
+2026-05-14 13:44:34,180 INFO ipython if isinstance(content, str):
+    try:
+        content = json.loads(content)
+    except Exception:
+        content = []
+print("Content type:", type(content).__name__, "length:", len(content) if content else 0)
+2026-05-14 13:44:34,180 INFO ipython print("First 3 entries:", json.dumps(content[:3], indent=2) if content else "EMPTY")
+2026-05-14 13:44:34,180 INFO ipython # Show any packaging mentions in content
+2026-05-14 13:44:34,180 INFO ipython if content:
+    for i, c in enumerate(content):
+        s = json.dumps(c)
+        if "ackag" in s:
+            print(f"  Found packaging in content[{i}]: {s[:200]}")
+print()
+2026-05-14 13:44:34,180 INFO ipython print("Sample entries:")
+2026-05-14 13:44:34,180 INFO ipython === session end ===
+2026-05-14 13:44:47,490 INFO ipython === bench console session ===
+2026-05-14 13:44:47,490 INFO ipython import frappe, json
+2026-05-14 13:44:47,491 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:44:47,491 INFO ipython content = json.loads(ws.content) if isinstance(ws.content, str) else (ws.content or [])
+2026-05-14 13:44:47,491 INFO ipython # Show all entries to understand layout
+2026-05-14 13:44:47,492 INFO ipython === session end ===
+2026-05-14 13:45:16,034 INFO ipython === bench console session ===
+2026-05-14 13:45:16,034 INFO ipython import frappe, json
+2026-05-14 13:45:16,035 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:45:16,035 INFO ipython content = json.loads(ws.content) if isinstance(ws.content, str) else (ws.content or [])
+2026-05-14 13:45:16,035 INFO ipython # Skip if already present
+2026-05-14 13:45:16,035 INFO ipython have = any(c.get("data", {}).get("card_name") == "Packaging Module" for c in content if c.get("type") == "card")
+2026-05-14 13:45:16,036 INFO ipython if not have:
+    # Insert Packaging Module card after "Crops Module" (currently at index 4)
+    insert_at = None
+    for i, c in enumerate(content):
+        if c.get("type") == "card" and c.get("data", {}).get("card_name") == "Crops Module":
+            insert_at = i + 1
+            break
+    new_card = {
+        "id": "pkgModule01",
+        "type": "card",
+        "data": {"card_name": "Packaging Module", "col": 4}
+    }
+    if insert_at is not None:
+        content.insert(insert_at, new_card)
+    else:
+        content.append(new_card)
+2026-05-14 13:45:16,036 INFO ipython # Also add a spacer between cards and charts if not present (optional)
+2026-05-14 13:45:16,036 INFO ipython ws.content = json.dumps(content)
+2026-05-14 13:45:16,036 INFO ipython ws.flags.ignore_links = True
+2026-05-14 13:45:16,036 INFO ipython ws.flags.ignore_validate = True
+2026-05-14 13:45:16,036 INFO ipython ws.flags.ignore_mandatory = True
+2026-05-14 13:45:16,037 INFO ipython ws.save(ignore_permissions=True)
+2026-05-14 13:45:16,037 INFO ipython frappe.db.commit()
+2026-05-14 13:45:16,037 INFO ipython print("Saved. Content entries:", len(content))
+2026-05-14 13:45:16,037 INFO ipython === session end ===
+2026-05-14 13:57:13,363 INFO ipython === bench console session ===
+2026-05-14 13:57:13,365 INFO ipython import frappe, json
+2026-05-14 13:57:13,366 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:57:13,366 INFO ipython print("Links by idx, with their card section:")
+2026-05-14 13:57:13,366 INFO ipython current_card = None
+2026-05-14 13:57:13,367 INFO ipython === session end ===
+2026-05-14 13:57:22,327 INFO ipython === bench console session ===
+2026-05-14 13:57:22,328 INFO ipython import frappe
+2026-05-14 13:57:22,328 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:57:22,329 INFO ipython print("Links:")
+2026-05-14 13:57:22,329 INFO ipython current_card = None
+2026-05-14 13:57:22,329 INFO ipython for l in sorted(ws.links, key=lambda x: x.idx):
+    if l.type == "Card Break":
+        print(f"--- [{l.idx}] CARD: {l.label} (link_count={l.link_count}) ---")
+    else:
+        marker = " *PKG*" if "ackag" in (l.label or "") else ""
+        print(f"   [{l.idx}] {l.label} -> {l.link_to}{marker}")
+2026-05-14 13:57:22,329 INFO ipython === session end ===
+2026-05-14 13:58:43,630 INFO ipython === bench console session ===
+2026-05-14 13:58:43,635 INFO ipython import frappe, json
+2026-05-14 13:58:43,635 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:58:43,636 INFO ipython # Collect packaging links (excluding the Card Break for Packaging Module)
+2026-05-14 13:58:43,636 INFO ipython pkg_links = [l for l in ws.links if l.type == "Link" and "ackag" in (l.label or "")]
+2026-05-14 13:58:43,636 INFO ipython pkg_card_break = next((l for l in ws.links if l.type == "Card Break" and l.label == "Packaging Module"), None)
+2026-05-14 13:58:43,636 INFO ipython # Remove the Packaging Module Card Break entirely
+2026-05-14 13:58:43,637 INFO ipython if pkg_card_break:
+    ws.links.remove(pkg_card_break)
+2026-05-14 13:58:43,637 INFO ipython # Find "Other Important Tools" card break and bump its link_count
+2026-05-14 13:58:43,637 INFO ipython oit = next(l for l in ws.links if l.type == "Card Break" and l.label == "Other Important Tools")
+2026-05-14 13:58:43,638 INFO ipython oit.link_count = 4 + len(pkg_links)
+2026-05-14 13:58:43,638 INFO ipython # Now rebuild idx ordering: walk through links, group by card,
+2026-05-14 13:58:43,638 INFO ipython # and append packaging links to Other Important Tools group.
+2026-05-14 13:58:43,638 INFO ipython links_by_idx = sorted(ws.links, key=lambda x: x.idx)
+2026-05-14 13:58:43,638 INFO ipython groups = []  # list of (card_break, [links])
+2026-05-14 13:58:43,639 INFO ipython current = None
+2026-05-14 13:58:43,639 INFO ipython for l in links_by_idx:
+    if l.type == "Card Break":
+        current = (l, [])
+        groups.append(current)
+    else:
+        # Skip packaging links here; we re-insert them under OIT
+        if l in pkg_links:
+            continue
+        if current:
+            current[1].append(l)
+2026-05-14 13:58:43,639 INFO ipython # Append packaging links under Other Important Tools
+2026-05-14 13:58:43,639 INFO ipython for g in groups:
+    if g[0].label == "Other Important Tools":
+        g[1].extend(pkg_links)
+        break
+2026-05-14 13:58:43,640 INFO ipython # Reassign idx values sequentially
+2026-05-14 13:58:43,640 INFO ipython new_idx = 1
+2026-05-14 13:58:43,640 INFO ipython for cb, items in groups:
+    cb.idx = new_idx; new_idx += 1
+    for l in items:
+        l.idx = new_idx; new_idx += 1
+2026-05-14 13:58:43,641 INFO ipython # Update content JSON to remove the Packaging Module card
+2026-05-14 13:58:43,641 INFO ipython content = json.loads(ws.content) if isinstance(ws.content, str) else (ws.content or [])
+2026-05-14 13:58:43,642 INFO ipython content = [c for c in content if not (c.get("type") == "card" and c.get("data", {}).get("card_name") == "Packaging Module")]
+2026-05-14 13:58:43,642 INFO ipython ws.content = json.dumps(content)
+2026-05-14 13:58:43,642 INFO ipython ws.flags.ignore_links = True
+2026-05-14 13:58:43,642 INFO ipython ws.flags.ignore_validate = True
+2026-05-14 13:58:43,643 INFO ipython ws.flags.ignore_mandatory = True
+2026-05-14 13:58:43,643 INFO ipython ws.save(ignore_permissions=True)
+2026-05-14 13:58:43,643 INFO ipython frappe.db.commit()
+2026-05-14 13:58:43,644 INFO ipython print("Saved. Total links:", len(ws.links))
+2026-05-14 13:58:43,644 INFO ipython print("OIT link_count now:", oit.link_count)
+2026-05-14 13:58:43,644 INFO ipython === session end ===
+2026-05-14 13:58:54,834 INFO ipython === bench console session ===
+2026-05-14 13:58:54,835 INFO ipython import frappe
+2026-05-14 13:58:54,835 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:58:54,835 INFO ipython print("Current 'Other Important Tools' contents:")
+2026-05-14 13:58:54,836 INFO ipython seen = False
+2026-05-14 13:58:54,836 INFO ipython === session end ===
+2026-05-14 13:59:03,228 INFO ipython === bench console session ===
+2026-05-14 13:59:03,229 INFO ipython import frappe
+2026-05-14 13:59:03,229 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-14 13:59:03,229 INFO ipython seen = False
+2026-05-14 13:59:03,229 INFO ipython for l in sorted(ws.links, key=lambda x: x.idx):
+    if l.type == "Card Break":
+        if l.label == "Other Important Tools":
+            seen = True
+            print("CARD:", l.label, "link_count=", l.link_count, "idx=", l.idx)
+        else:
+            if seen:
+                break
+    elif seen:
+        print("   ", l.idx, l.label, "->", l.link_to)
+print("===END===")
+2026-05-14 13:59:03,229 INFO ipython === session end ===
+2026-05-14 14:16:45,952 INFO ipython === bench console session ===
+2026-05-14 14:16:45,963 INFO ipython import frappe
+2026-05-14 14:16:45,963 INFO ipython # Sanity check: list what should appear in the dropdown
+2026-05-14 14:16:45,963 INFO ipython print("Animal Products:")
+2026-05-14 14:16:45,964 INFO ipython for r in frappe.db.sql("SELECT name FROM `tabAnimal Products` ORDER BY name", as_dict=1):
+    print(" -", r["name"], "Item exists:", bool(frappe.db.exists("Item", r["name"])))
+print()
+2026-05-14 14:16:45,964 INFO ipython print("Crop Products:")
+2026-05-14 14:16:45,964 INFO ipython === session end ===
+2026-05-14 14:46:14,022 INFO ipython === bench console session ===
+2026-05-14 14:46:14,027 INFO ipython import frappe
+2026-05-14 14:46:14,027 INFO ipython # Verify the new doctype is registered
+2026-05-14 14:46:14,027 INFO ipython print("Packaging Item Product exists:", bool(frappe.db.exists("DocType", "Packaging Item Product")))
+2026-05-14 14:46:14,028 INFO ipython # Verify Packaging Item now has attached_products field
+2026-05-14 14:46:14,028 INFO ipython meta = frappe.get_meta("Packaging Item")
+2026-05-14 14:46:14,029 INFO ipython fields = [f.fieldname for f in meta.fields]
+2026-05-14 14:46:14,029 INFO ipython print("Has attached_products field:", "attached_products" in fields)
+2026-05-14 14:46:14,029 INFO ipython print("Has tab_products field:", "tab_products" in fields)
+2026-05-14 14:46:14,029 INFO ipython === session end ===
+2026-05-15 09:32:36,504 INFO ipython === bench console session ===
+2026-05-15 09:32:36,507 INFO ipython import frappe
+2026-05-15 09:32:36,507 INFO ipython user = "samsaf674@gmail.com"
+2026-05-15 09:32:36,507 INFO ipython print("--- User record ---")
+2026-05-15 09:32:36,507 INFO ipython u = frappe.db.get_value("User", user, ["name", "module_profile", "default_workspace", "enabled"], as_dict=True)
+2026-05-15 09:32:36,507 INFO ipython print(u)
+2026-05-15 09:32:36,508 INFO ipython print("\n--- Roles ---")
+2026-05-15 09:32:36,508 INFO ipython roles = frappe.db.get_all("Has Role", filters={"parent": user, "parenttype": "User"}, fields=["role"])
+2026-05-15 09:32:36,508 INFO ipython for r in roles:
+    print(r.role)
+2026-05-15 09:32:36,508 INFO ipython print("\n--- Block Modules on user ---")
+2026-05-15 09:32:36,508 INFO ipython blocked = frappe.db.get_all("Block Module", filters={"parent": user, "parenttype": "User"}, fields=["module"])
+2026-05-15 09:32:36,508 INFO ipython for b in blocked:
+    print(b.module)
+2026-05-15 09:32:36,508 INFO ipython print("\n--- Module Profile (if any) ---")
+2026-05-15 09:32:36,509 INFO ipython if u and u.get("module_profile"):
+    mp_blocked = frappe.db.get_all("Block Module", filters={"parent": u["module_profile"], "parenttype": "Module Profile"}, fields=["module"])
+    print("Profile:", u["module_profile"])
+    for b in mp_blocked:
+        print("  blocked:", b.module)
+2026-05-15 09:32:36,509 INFO ipython print("\n--- All workspaces ordered ---")
+2026-05-15 09:32:36,509 INFO ipython ws = frappe.db.get_all("Workspace", fields=["name", "public", "module", "parent_page", "sequence_id", "for_user"], order_by="public DESC, sequence_id ASC", limit=50)
+2026-05-15 09:32:36,509 INFO ipython === session end ===
+2026-05-15 10:10:02,245 INFO ipython === bench console session ===
+2026-05-15 10:10:02,248 INFO ipython import frappe; frappe.connect(site="farm.local"); frappe.db.sql_ddl("DROP TABLE IF EXISTS `tabProduct Packaging Config`"); frappe.db.commit(); print("rows:", frappe.db.sql("SHOW TABLES LIKE \"tabProduct Packaging Config\""))
+2026-05-15 10:10:02,248 INFO ipython === session end ===
+2026-05-20 12:36:49,913 INFO ipython === bench console session ===
+2026-05-20 12:36:49,921 INFO ipython import frappe
+2026-05-20 12:36:49,921 INFO ipython ws = frappe.get_doc("Workspace", "Farm Management System")
+2026-05-20 12:36:49,921 INFO ipython # Find the index of Rabbit Production Report among the in-memory child rows
+2026-05-20 12:36:49,921 INFO ipython insert_after_idx = None
+2026-05-20 12:36:49,922 INFO ipython for i, link in enumerate(ws.links):
+    if link.link_to == "Rabbit Production Report":
+        insert_after_idx = i
+        break
+2026-05-20 12:36:49,922 INFO ipython if insert_after_idx is None:
+    insert_after_idx = len(ws.links) - 1
+2026-05-20 12:36:49,922 INFO ipython new_link = ws.append("links", {
+    "label": "Poultry Production Report",
+    "type": "Link",
+    "link_type": "Report",
+    "link_to": "Poultry Production Report",
+    "onboard": 0,
+    "is_query_report": 1,
+    "hidden": 0,
+})
+2026-05-20 12:36:49,922 INFO ipython # Move the just-appended row to right after the Rabbit Production Report entry
+2026-05-20 12:36:49,923 INFO ipython ws.links.insert(insert_after_idx + 1, ws.links.pop())
+2026-05-20 12:36:49,923 INFO ipython # Renumber idx
+2026-05-20 12:36:49,923 INFO ipython for i, link in enumerate(ws.links, start=1):
+    link.idx = i
+2026-05-20 12:36:49,923 INFO ipython ws.save(ignore_permissions=True)
+2026-05-20 12:36:49,924 INFO ipython frappe.db.commit()
+2026-05-20 12:36:49,924 INFO ipython print("Inserted Poultry Production Report at idx", insert_after_idx + 2)
+2026-05-20 12:36:49,925 INFO ipython === session end ===
+2026-05-20 12:37:24,951 INFO ipython === bench console session ===
+2026-05-20 12:37:24,952 INFO ipython import frappe
+2026-05-20 12:37:24,952 INFO ipython import uuid
+2026-05-20 12:37:24,953 INFO ipython # Find idx of Rabbit Production Report
+2026-05-20 12:37:24,953 INFO ipython rabbit_idx = frappe.db.sql(
+    "SELECT idx FROM `tabWorkspace Link` WHERE parent=%s AND link_to=%s",
+    ("Farm Management System", "Rabbit Production Report"),
+)
+2026-05-20 12:37:24,953 INFO ipython target_idx = (rabbit_idx[0][0] if rabbit_idx else 59) + 1
+2026-05-20 12:37:24,953 INFO ipython # Shift all rows at or after target_idx down by 1
+2026-05-20 12:37:24,953 INFO ipython frappe.db.sql(
+    "UPDATE `tabWorkspace Link` SET idx = idx + 1 WHERE parent=%s AND idx >= %s",
+    ("Farm Management System", target_idx),
+)
+2026-05-20 12:37:24,953 INFO ipython name = "ppr-" + uuid.uuid4().hex[:10]
+2026-05-20 12:37:24,954 INFO ipython now = frappe.utils.now()
+2026-05-20 12:37:24,954 INFO ipython frappe.db.sql(
+    """
+    INSERT INTO `tabWorkspace Link`
+    (name, creation, modified, modified_by, owner, docstatus, idx,
+     parent, parentfield, parenttype,
+     label, type, link_type, link_to, hidden, onboard, is_query_report)
+    VALUES (%s, %s, %s, %s, %s, 0, %s,
+            %s, %s, %s,
+            %s, %s, %s, %s, 0, 0, 1)
+    """,
+    (
+        name, now, now, "Administrator", "Administrator", target_idx,
+        "Farm Management System", "links", "Workspace",
+        "Poultry Production Report", "Link", "Report", "Poultry Production Report",
+    ),
+)
+2026-05-20 12:37:24,954 INFO ipython frappe.db.commit()
+2026-05-20 12:37:24,954 INFO ipython print(f"Inserted Poultry Production Report at idx {target_idx}")
+2026-05-20 12:37:24,954 INFO ipython === session end ===
+2026-05-20 12:59:38,936 INFO ipython === bench console session ===
+2026-05-20 12:59:38,936 INFO ipython import frappe
+2026-05-20 12:59:38,937 INFO ipython import uuid
+2026-05-20 12:59:38,937 INFO ipython # Skip if already present
+2026-05-20 12:59:38,937 INFO ipython exists = frappe.db.exists("Workspace Link", {
+    "parent": "Farm Management System",
+    "link_to": "sell-packaged-products",
+})
+2026-05-20 12:59:38,937 INFO ipython if exists:
+    print("Link already exists:", exists)
+else:
+    # Find idx of Packaging Management Hub to insert right after it
+    hub_idx = frappe.db.sql(
+        "SELECT idx FROM `tabWorkspace Link` WHERE parent=%s AND link_to=%s",
+        ("Farm Management System", "packaging-management"),
+    )
+    target_idx = (hub_idx[0][0] if hub_idx else 10) + 1
+2026-05-20 12:59:38,938 INFO ipython     frappe.db.sql(
+        "UPDATE `tabWorkspace Link` SET idx = idx + 1 WHERE parent=%s AND idx >= %s",
+        ("Farm Management System", target_idx),
+    )
+2026-05-20 12:59:38,938 INFO ipython     name = "sppl-" + uuid.uuid4().hex[:10]
+2026-05-20 12:59:38,938 INFO ipython     now = frappe.utils.now()
+2026-05-20 12:59:38,938 INFO ipython     frappe.db.sql(
+        """
+        INSERT INTO `tabWorkspace Link`
+        (name, creation, modified, modified_by, owner, docstatus, idx,
+         parent, parentfield, parenttype,
+         label, type, link_type, link_to, hidden, onboard, is_query_report)
+        VALUES (%s, %s, %s, %s, %s, 0, %s,
+                %s, %s, %s,
+                %s, %s, %s, %s, 0, 0, 0)
+        """,
+        (
+            name, now, now, "Administrator", "Administrator", target_idx,
+            "Farm Management System", "links", "Workspace",
+            "Sell Packaged Products", "Link", "Page", "sell-packaged-products",
+        ),
+    )
+2026-05-20 12:59:38,938 INFO ipython     frappe.db.commit()
+2026-05-20 12:59:38,939 INFO ipython     print(f"Inserted Sell Packaged Products at idx {target_idx}")
+2026-05-20 12:59:38,939 INFO ipython === session end ===

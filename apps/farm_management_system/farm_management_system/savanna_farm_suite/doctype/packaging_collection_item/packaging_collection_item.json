@@ -1,0 +1,127 @@
+{
+ "actions": [],
+ "creation": "2026-05-14 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "product",
+  "packaging_item",
+  "linked_item",
+  "packaged_item",
+  "units_per_package",
+  "quantity",
+  "total_units",
+  "current_stock",
+  "stock_entry_reference"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "fieldname": "product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product",
+   "options": "Item",
+   "reqd": 1,
+   "columns": 3
+  },
+  {
+   "bold": 1,
+   "fieldname": "packaging_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Packaging Item",
+   "options": "Packaging Item",
+   "reqd": 1,
+   "columns": 3
+  },
+  {
+   "fetch_from": "packaging_item.linked_item",
+   "fieldname": "linked_item",
+   "fieldtype": "Link",
+   "label": "Linked Item",
+   "options": "Item",
+   "read_only": 1
+  },
+  {
+   "description": "Packaged-product Item produced by this row (auto-created on submit)",
+   "fieldname": "packaged_item",
+   "fieldtype": "Link",
+   "label": "Packaged Item",
+   "options": "Item",
+   "read_only": 1
+  },
+  {
+   "fieldname": "units_per_package",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Units / Package",
+   "non_negative": 1,
+   "precision": "3",
+   "read_only": 1,
+   "columns": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Quantity (packages used)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "total_units",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Total Units",
+   "precision": "3",
+   "read_only": 1,
+   "columns": 1
+  },
+  {
+   "fetch_from": "packaging_item.current_stock",
+   "fieldname": "current_stock",
+   "fieldtype": "Float",
+   "label": "Available Stock",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_entry_reference",
+   "fieldtype": "Link",
+   "label": "Stock Entry",
+   "options": "Stock Entry",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-14 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Packaging Collection Item",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

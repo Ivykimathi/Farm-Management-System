@@ -1,0 +1,379 @@
+{
+ "actions": [],
+ "autoname": "BATCH-.YYYY./.MM./.###",
+ "creation": "2025-08-31 16:48:58.859627",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_lqos",
+  "animals_received_on",
+  "received_from",
+  "lpo",
+  "amended_from",
+  "animal_batch",
+  "poultry_shed",
+  "animal_category",
+  "batch_status",
+  "column_break_fbtk",
+  "animal_stage",
+  "age_from_hatch_date",
+  "total_animals",
+  "batch_weight",
+  "average_weight_per_bird",
+  "abnormalities",
+  "deformities",
+  "batch_cost",
+  "image_of_animal_batch",
+  "other_important_details_regarding_batch_section",
+  "mortality_count",
+  "mortality_rate",
+  "profitability_analysis_for_this_batch",
+  "column_break_ximn",
+  "total_feed",
+  "total_water",
+  "sales_revenue",
+  "poultry_batch_logs_tab",
+  "important_logs_section",
+  "treatment_and_vaccination_log",
+  "treatment_chart",
+  "feeding_section_section",
+  "nourishment_table",
+  "daily_consumption",
+  "production_section_section",
+  "product_inventory_log",
+  "collection_tracker"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_lqos",
+   "fieldtype": "Section Break",
+   "label": "Important Details"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Poultry Batches",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "bold": 1,
+   "default": "Chicken",
+   "fieldname": "animal_batch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Batch Specific for?",
+   "options": "Animals",
+   "reqd": 1
+  },
+   {
+   "bold": 1,
+   "fieldname": "poultry_shed",
+   "fieldtype": "Table MultiSelect",
+   "label": "Poultry Shed Blocks",
+   "options": "Poultry Batch Blocks",
+   "description": "Select one or more blocks / sheds for this batch."
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.animal_batch",
+   "description": "Multiple Selection Allowed.",
+   "fieldname": "animal_category",
+   "fieldtype": "Table MultiSelect",
+   "label": "Select Animal Category (If Applicable)",
+   "options": "Animals Sub Categories"
+  },
+  {
+   "bold": 1,
+   "default": "Today",
+   "fieldname": "animals_received_on",
+   "fieldtype": "Date",
+   "label": "Batch Received On?"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.animal_batch",
+   "fieldname": "animal_stage",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Specify Batch Current Life Cycle",
+   "options": "Animal Stages"
+  },
+  {
+   "fieldname": "column_break_fbtk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "total_animals",
+   "fieldtype": "Int",
+   "label": "Total Number of Animals Received",
+   "non_negative": 1,
+   "placeholder": "100",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "abnormalities",
+   "fieldtype": "Check",
+   "label": "Are there any animals showing abnormalities?"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.abnormalities == 1",
+   "fieldname": "deformities",
+   "fieldtype": "Int",
+   "label": "Specify Number of Deformities",
+   "mandatory_depends_on": "eval:doc.abnormalities == 1",
+   "non_negative": 1
+  },
+  {
+   "bold": 1,
+   "description": "SUBJECT TO CHANGE.",
+   "fetch_from": "lpo.grand_total",
+   "fetch_if_empty": 1,
+   "fieldname": "batch_cost",
+   "fieldtype": "Currency",
+   "label": "What is the Total Cost of this Batch?",
+   "non_negative": 1,
+   "placeholder": "100000",
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "image_of_animal_batch",
+   "fieldtype": "Attach Image",
+   "label": "Image of Animal Batch (OPTIONAL)"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "other_important_details_regarding_batch_section",
+   "fieldtype": "Section Break",
+   "label": "Other Important Details Regarding Batch"
+  },
+  {
+   "allow_on_submit": 1,
+   "bold": 1,
+   "fieldname": "mortality_count",
+   "fieldtype": "Int",
+   "label": "Mortality Count (To Date)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "bold": 1,
+   "fieldname": "mortality_rate",
+   "fieldtype": "Percent",
+   "label": "Mortality Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ximn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_feed",
+   "fieldtype": "Small Text",
+   "label": "Total Feed Consumption (To Date)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_water",
+   "fieldtype": "Data",
+   "label": "Total Water Consumption (To Date)",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "description": "Please NOTE: This will depend on the Animals tied to the batch.",
+   "fieldname": "sales_revenue",
+   "fieldtype": "Currency",
+   "label": "Total Sales Revenue generated",
+   "non_negative": 1,
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "received_from",
+   "fieldtype": "Link",
+   "label": "Batch Received From Supplier? (If Applicable)",
+   "options": "Supplier"
+  },
+  {
+   "bold": 1,
+   "fieldname": "batch_weight",
+   "fieldtype": "Float",
+   "label": "Total Weight of this Batch (In KG)",
+   "non_negative": 1,
+   "placeholder": "65.93",
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "average_weight_per_bird",
+   "fieldtype": "Float",
+   "label": "Average Weight Per Bird",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "poultry_batch_logs_tab",
+   "fieldtype": "Tab Break",
+   "label": "Important Batch Logs"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "important_logs_section",
+   "fieldtype": "Section Break",
+   "label": "Treatment Section"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "nourishment_table",
+   "fieldtype": "Table",
+   "label": "Nourishment Table",
+   "options": "Animal Batch Feed Log",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.received_from",
+   "fieldname": "lpo",
+   "fieldtype": "Link",
+   "label": "Choose the Purchase Order",
+   "mandatory_depends_on": "eval:doc.received_from",
+   "options": "Purchase Order"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "batch_status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Batch Status",
+   "options": "\nActive\nCulled\nPartially Sold"
+  },
+  {
+   "bold": 1,
+   "description": "EXAMPLE: 1 Week, 3 Days, 1 Month etc...",
+   "fieldname": "age_from_hatch_date",
+   "fieldtype": "Data",
+   "label": "Time Since Hatching",
+   "placeholder": "1 Day"
+  },
+  {
+   "bold": 1,
+   "fieldname": "daily_consumption",
+   "fieldtype": "HTML",
+   "label": "Daily Feed Consumption",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "bold": 1,
+   "fieldname": "treatment_and_vaccination_log",
+   "fieldtype": "Table",
+   "label": "Treatment and Vaccination Log",
+   "options": "Treatment Table",
+   "read_only": 1
+  },
+  {
+   "fieldname": "treatment_chart",
+   "fieldtype": "HTML",
+   "label": "Treatment Chart"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "feeding_section_section",
+   "fieldtype": "Section Break",
+   "label": "Feeding Section"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "production_section_section",
+   "fieldtype": "Section Break",
+   "label": "Production Section"
+  },
+  {
+   "bold": 1,
+   "fieldname": "product_inventory_log",
+   "fieldtype": "Table",
+   "label": "Product Inventory Log",
+   "options": "Poultry Collections Table"
+  },
+  {
+   "fieldname": "collection_tracker",
+   "fieldtype": "HTML",
+   "label": "Product Collection Tracker"
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.product_inventory_log",
+   "fieldname": "profitability_analysis_for_this_batch",
+   "fieldtype": "HTML",
+   "label": "Profitability Analysis for this Batch"
+  }
+ ],
+ "grid_page_length": 50,
+ "image_field": "image_of_animal_batch",
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "link_doctype": "Treatment and Vaccination Logs",
+   "link_fieldname": "poultry_batch_under_treatment"
+  },
+  {
+   "link_doctype": "Nourishment Log",
+   "link_fieldname": "poultry_batch"
+  }
+ ],
+ "modified": "2026-03-01 00:49:33.495936",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Poultry Batches",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "animal_batch,batch_status, total_animals, animals_received_on",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Active"
+  },
+  {
+   "color": "Red",
+   "title": "Culled"
+  },
+  {
+   "color": "Purple",
+   "title": "Partially Sold"
+  }
+ ],
+ "title_field": "animal_batch"
+}

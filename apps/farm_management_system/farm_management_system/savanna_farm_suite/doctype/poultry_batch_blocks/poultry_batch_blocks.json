@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-11 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "poultry_shed",
+  "poultry_batch"
+ ],
+ "fields": [
+  {
+   "fieldname": "poultry_shed",
+   "fieldtype": "Link",
+   "label": "Poultry Shed",
+   "options": "Poultry Shed",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "poultry_batch",
+   "fieldtype": "Link",
+   "label": "Poultry Batch",
+   "options": "Poultry Batches",
+   "read_only": 1,
+   "description": "Auto-filled from the parent batch on save."
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-11 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Poultry Batch Blocks",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

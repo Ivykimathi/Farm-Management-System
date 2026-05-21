@@ -1,0 +1,199 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-01 09:31:40.227444",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nourishment_record_section",
+  "record",
+  "section_break_bcyv",
+  "specify_animal",
+  "specify_cattle_shed",
+  "specify_sheep_shed",
+  "specify_rabbit_shed",
+  "specify_pig_shed",
+  "specify_goat_shed",
+  "poultry_category",
+  "poultry_batch",
+  "poultry_house",
+  "column_break_mwzl",
+  "nourishment_date",
+  "user",
+  "feeding_section_section",
+  "table_ycas",
+  "incl_hydration",
+  "hydration_section_section",
+  "water_amount"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "default": "By Batch",
+   "depends_on": "eval:doc.specify_animal == \"Chicken\"",
+   "fieldname": "poultry_category",
+   "fieldtype": "Select",
+   "label": "Categorize Poultry by?",
+   "options": "\nBy Batch\nBy Poultry Shed",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "nourishment_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Nourishment Date",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "depends_on": "eval:doc.specify_animal == \"Chicken\"",
+   "fieldname": "poultry_batch",
+   "fieldtype": "Link",
+   "label": "Specify which Poultry Batch",
+   "mandatory_depends_on": "eval:doc.poultry_category == \"By Batch\"",
+   "options": "Poultry Batches",
+   "read_only_depends_on": "eval:doc.poultry_category == \"By Poultry Shed\""
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "User Conducting Routine",
+   "options": "User"
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Chicken\"",
+   "fieldname": "poultry_house",
+   "fieldtype": "Link",
+   "label": "Specify which Poultry Shed",
+   "mandatory_depends_on": "eval:doc.poultry_category == \"By Poultry Shed\"",
+   "options": "Poultry Shed",
+   "read_only_depends_on": "eval:doc.poultry_category == \"By Batch\""
+  },
+  {
+   "description": "Please NOTE: Animal Feeds will filter based on Animal Selected.",
+   "fieldname": "feeding_section_section",
+   "fieldtype": "Section Break",
+   "label": "Feeding Section"
+  },
+  {
+   "bold": 1,
+   "fieldname": "table_ycas",
+   "fieldtype": "Table",
+   "options": "Nourishment Table"
+  },
+  {
+   "fieldname": "column_break_mwzl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "default": "0",
+   "fieldname": "incl_hydration",
+   "fieldtype": "Check",
+   "label": "Include Hydration in Today's Routine"
+  },
+  {
+   "collapsible_depends_on": "eval:doc.incl_hydration == 1",
+   "depends_on": "eval:doc.incl_hydration == 1",
+   "fieldname": "hydration_section_section",
+   "fieldtype": "Section Break",
+   "label": "Hydration Section"
+  },
+  {
+   "fieldname": "water_amount",
+   "fieldtype": "Float",
+   "label": "Specify Amount of Water used (In Litres)",
+   "mandatory_depends_on": "eval:doc.incl_hydration == 1",
+   "precision": "3"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "eval:doc.nourishment_date",
+   "fieldname": "nourishment_record_section",
+   "fieldtype": "Section Break",
+   "label": "Nourishment Record"
+  },
+  {
+   "description": "NOTE: Results may be LIMITED to ONLY a few days.",
+   "fieldname": "record",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "section_break_bcyv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "specify_animal",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Specify Animal",
+   "options": "Animals",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Cattle\"",
+   "fieldname": "specify_cattle_shed",
+   "fieldtype": "Link",
+   "label": "Specify Cattle Shed",
+   "options": "Cattle Shed"
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Sheep\"",
+   "fieldname": "specify_sheep_shed",
+   "fieldtype": "Link",
+   "label": "Specify Sheep Shed",
+   "options": "Sheep Shed"
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Rabbit\"",
+   "fieldname": "specify_rabbit_shed",
+   "fieldtype": "Link",
+   "label": "Specify Rabbit Shed",
+   "options": "Rabbit Shed"
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Pig\"",
+   "fieldname": "specify_pig_shed",
+   "fieldtype": "Link",
+   "label": "Specify Pig Shed",
+   "options": "Pig Shed"
+  },
+  {
+   "depends_on": "eval:doc.specify_animal == \"Goat\"",
+   "fieldname": "specify_goat_shed",
+   "fieldtype": "Link",
+   "label": "Specify Goat Shed",
+   "options": "Goat Shed"
+  }
+ ],
+ "grid_page_length": 50,
+ "in_create": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-03-01 09:35:57.602185",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Feeding and Watering Tool",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

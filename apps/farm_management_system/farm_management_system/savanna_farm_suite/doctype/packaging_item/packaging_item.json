@@ -1,0 +1,147 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:packaging_item_name",
+ "creation": "2026-05-14 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tab_details",
+  "packaging_item_name",
+  "capacity",
+  "default_uom",
+  "column_break_uom",
+  "default_warehouse",
+  "purchase_rate",
+  "linked_item",
+  "section_stock",
+  "current_stock",
+  "notes",
+  "tab_products",
+  "attached_products_intro",
+  "attached_products"
+ ],
+ "fields": [
+  {
+   "fieldname": "tab_details",
+   "fieldtype": "Tab Break",
+   "label": "Details"
+  },
+  {
+   "bold": 1,
+   "fieldname": "packaging_item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Packaging Item Name",
+   "placeholder": "EXAMPLE: Egg Tray 2-Pack, Egg Tray 6-Pack",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "bold": 1,
+   "description": "How many product units this package holds (e.g., 2 for a 2-pack egg tray)",
+   "fieldname": "capacity",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Capacity (units per package)",
+   "non_negative": 1,
+   "precision": "3",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "default_uom",
+   "fieldtype": "Link",
+   "label": "Default Unit of Measure",
+   "options": "UOM",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_uom",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "purchase_rate",
+   "fieldtype": "Currency",
+   "label": "Default Purchase Rate",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "linked_item",
+   "fieldtype": "Link",
+   "label": "Linked ERPNext Item",
+   "options": "Item",
+   "read_only": 1,
+   "description": "Auto-created stock Item used for inventory tracking"
+  },
+  {
+   "fieldname": "section_stock",
+   "fieldtype": "Section Break",
+   "label": "Stock"
+  },
+  {
+   "fieldname": "current_stock",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Current Stock",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "tab_products",
+   "fieldtype": "Tab Break",
+   "label": "Attached Products"
+  },
+  {
+   "fieldname": "attached_products_intro",
+   "fieldtype": "HTML",
+   "options": "<div class='text-muted small'>Attach the products this packaging item is used for (e.g., Chicken eggs &rarr; 2-pack tray holds 2 eggs). When you save, configurations are synced to <b>Product Packaging Config</b> and become available in Packaging Collection.</div>"
+  },
+  {
+   "fieldname": "attached_products",
+   "fieldtype": "Table",
+   "label": "Products",
+   "options": "Packaging Item Product"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-14 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Packaging Item",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "packaging_item_name"
+}

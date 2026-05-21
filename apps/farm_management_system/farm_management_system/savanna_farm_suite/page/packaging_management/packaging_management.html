@@ -1,0 +1,224 @@
+{% extends "frappe/templates/web.html" %}
+
+{% block page_content %}
+<div class="container mt-4">
+	<h1>Packaging Management</h1>
+	<p class="text-muted">Define packaging items, record stock purchases, configure product packaging and create packaging collections.</p>
+
+	<div class="row mt-4">
+		<div class="col-md-3 mb-4">
+			<div class="card h-100">
+				<div class="card-header bg-primary text-white">
+					<h6 class="mb-0">1. Packaging Item</h6>
+				</div>
+				<div class="card-body">
+					<p class="small">Define a packaging container (e.g. 2-pack tray, 6-pack tray). Auto-creates a stock Item.</p>
+					<button class="btn btn-primary btn-sm" onclick="frappe.new_doc('Packaging Item', {})">
+						<i class="fa fa-plus"></i> New
+					</button>
+					<button class="btn btn-outline-primary btn-sm" onclick="frappe.set_route('List', 'Packaging Item')">
+						<i class="fa fa-list"></i> View
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3 mb-4">
+			<div class="card h-100">
+				<div class="card-header bg-warning text-dark">
+					<h6 class="mb-0">2. Purchase Stock</h6>
+				</div>
+				<div class="card-body">
+					<p class="small">Record purchases of packaging items to add stock.</p>
+					<button class="btn btn-warning btn-sm" onclick="frappe.new_doc('Packaging Item Purchase', {})">
+						<i class="fa fa-plus"></i> New
+					</button>
+					<button class="btn btn-outline-warning btn-sm" onclick="frappe.set_route('List', 'Packaging Item Purchase')">
+						<i class="fa fa-list"></i> View
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3 mb-4">
+			<div class="card h-100">
+				<div class="card-header bg-success text-white">
+					<h6 class="mb-0">3. Configure Product</h6>
+				</div>
+				<div class="card-body">
+					<p class="small">Attach packaging items to a product (e.g., Eggs &rarr; 2-pack, 6-pack, 12-pack).</p>
+					<button class="btn btn-success btn-sm" onclick="frappe.new_doc('Product Packaging Config', {})">
+						<i class="fa fa-plus"></i> New
+					</button>
+					<button class="btn btn-outline-success btn-sm" onclick="frappe.set_route('List', 'Product Packaging Config')">
+						<i class="fa fa-list"></i> View
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3 mb-4">
+			<div class="card h-100">
+				<div class="card-header bg-info text-white">
+					<h6 class="mb-0">4. Package Collection</h6>
+				</div>
+				<div class="card-body">
+					<p class="small">Pick a product, enter qty per packaging type, save. Stock is deducted on submit.</p>
+					<button class="btn btn-info btn-sm" onclick="frappe.new_doc('Packaging Collection', {})">
+						<i class="fa fa-plus"></i> New
+					</button>
+					<button class="btn btn-outline-info btn-sm" onclick="frappe.set_route('List', 'Packaging Collection')">
+						<i class="fa fa-list"></i> View
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-4">
+		<div class="col-md-12 mb-4">
+			<div class="card">
+				<div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+					<h6 class="mb-0">Packaged Product Stock</h6>
+					<small class="text-muted">Packs available for sale &middot; sold = depleted by Delivery Note / Sales Invoice this month</small>
+				</div>
+				<div class="card-body">
+					<div id="packaged_product_stock"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-4">
+		<div class="col-md-6 mb-4">
+			<div class="card">
+				<div class="card-header bg-secondary text-white">
+					<h6 class="mb-0">Packaging Container Stock</h6>
+				</div>
+				<div class="card-body">
+					<div id="packaging_stock"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 mb-4">
+			<div class="card">
+				<div class="card-header bg-secondary text-white">
+					<h6 class="mb-0">Recent Packaging Collections</h6>
+				</div>
+				<div class="card-body">
+					<div id="recent_collections"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+function load_packaged_product_stock() {
+	frappe.call({
+		method: 'farm_management_system.savanna_farm_suite.doctype.packaging_collection.packaging_collection.get_packaged_product_summary',
+		callback: function(r) {
+			const target = document.getElementById('packaged_product_stock');
+			if (r.message && r.message.length > 0) {
+				let html = '<table class="table table-sm"><thead><tr>'
+					+ '<th>Packaged Item</th>'
+					+ '<th class="text-right">Packs Made (lifetime)</th>'
+					+ '<th class="text-right">Packs Sold (MTD)</th>'
+					+ '<th class="text-right">Packs Remaining</th>'
+					+ '</tr></thead><tbody>';
+				r.message.forEach(function(d) {
+					const remaining = (d.current_stock || 0);
+					const lowStock = remaining < 5;
+					html += '<tr>'
+						+ '<td><a href="/app/item/' + encodeURIComponent(d.item_code) + '">' + (d.item_name || d.item_code) + '</a></td>'
+						+ '<td class="text-right">' + Number(d.packs_made || 0).toFixed(0) + '</td>'
+						+ '<td class="text-right">' + Number(d.packs_sold_mtd || 0).toFixed(0) + '</td>'
+						+ '<td class="text-right ' + (lowStock ? 'text-danger font-weight-bold' : '') + '">' + Number(remaining).toFixed(0) + '</td>'
+						+ '</tr>';
+				});
+				html += '</tbody></table>';
+				target.innerHTML = html;
+			} else {
+				target.innerHTML = '<p class="text-muted mb-0">No packaged products yet. Submit a Packaging Collection to start tracking.</p>';
+			}
+		}
+	});
+}
+
+function load_recent_collections() {
+	frappe.call({
+		method: 'frappe.client.get_list',
+		args: {
+			doctype: 'Packaging Collection',
+			fields: ['name', 'date', 'total_packed', 'docstatus'],
+			limit_page_length: 10,
+			order_by: 'creation desc'
+		},
+		callback: function(r) {
+			const target = document.getElementById('recent_collections');
+			if (r.message && r.message.length > 0) {
+				let html = '<table class="table table-sm"><thead><tr><th>ID</th><th>Date</th><th class="text-right">Units Packed</th><th>Status</th></tr></thead><tbody>';
+				r.message.forEach(function(d) {
+					const status = d.docstatus == 1 ? '<span class="badge badge-success">Submitted</span>'
+						: d.docstatus == 2 ? '<span class="badge badge-danger">Cancelled</span>'
+						: '<span class="badge badge-secondary">Draft</span>';
+					html += '<tr>'
+						+ '<td><a href="/app/packaging-collection/' + d.name + '">' + d.name + '</a></td>'
+						+ '<td>' + (d.date || '') + '</td>'
+						+ '<td class="text-right">' + Number(d.total_packed || 0).toFixed(0) + '</td>'
+						+ '<td>' + status + '</td>'
+						+ '</tr>';
+				});
+				html += '</tbody></table>';
+				target.innerHTML = html;
+			} else {
+				target.innerHTML = '<p class="text-muted mb-0">No packaging collections found</p>';
+			}
+		}
+	});
+}
+
+function load_packaging_stock() {
+	frappe.call({
+		method: 'frappe.client.get_list',
+		args: {
+			doctype: 'Packaging Item',
+			fields: ['name', 'capacity', 'current_stock', 'default_uom'],
+			limit_page_length: 20,
+			order_by: 'packaging_item_name asc'
+		},
+		callback: function(r) {
+			const target = document.getElementById('packaging_stock');
+			if (r.message && r.message.length > 0) {
+				let html = '<table class="table table-sm"><thead><tr><th>Container</th><th class="text-right">Capacity</th><th class="text-right">Stock</th></tr></thead><tbody>';
+				r.message.forEach(function(d) {
+					const lowStock = (d.current_stock || 0) < 10;
+					html += '<tr>'
+						+ '<td><a href="/app/packaging-item/' + encodeURIComponent(d.name) + '">' + d.name + '</a></td>'
+						+ '<td class="text-right">' + Number(d.capacity || 0).toFixed(0) + '</td>'
+						+ '<td class="text-right ' + (lowStock ? 'text-danger font-weight-bold' : '') + '">' + Number(d.current_stock || 0).toFixed(0) + '</td>'
+						+ '</tr>';
+				});
+				html += '</tbody></table>';
+				target.innerHTML = html;
+			} else {
+				target.innerHTML = '<p class="text-muted mb-0">No packaging items yet</p>';
+			}
+		}
+	});
+}
+
+frappe.ready(function() {
+	load_packaged_product_stock();
+	load_recent_collections();
+	load_packaging_stock();
+});
+</script>
+
+<style>
+.card { border: none; box-shadow: 0 1px 3px rgba(0,0,0,0.12); transition: all 0.2s ease; }
+.card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.15); transform: translateY(-2px); }
+.card-header { border-bottom: 2px solid rgba(0,0,0,0.1); }
+.text-right { text-align: right; }
+</style>
+{% endblock %}

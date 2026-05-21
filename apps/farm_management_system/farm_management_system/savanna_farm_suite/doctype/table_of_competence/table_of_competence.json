@@ -1,0 +1,55 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-29 19:48:10.087658",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "skill__competency",
+  "proficiency_level",
+  "certified"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "fieldname": "skill__competency",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Skill / Competency",
+   "reqd": 1,
+   "width": "5"
+  },
+  {
+   "bold": 1,
+   "fieldname": "proficiency_level",
+   "fieldtype": "Rating",
+   "in_list_view": 1,
+   "label": "Proficiency Level\t",
+   "width": "4"
+  },
+  {
+   "bold": 1,
+   "default": "1",
+   "fieldname": "certified",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Certified\t",
+   "width": "1"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-03-29 19:50:59.040336",
+ "modified_by": "Administrator",
+ "module": "Savanna Farm Suite",
+ "name": "Table of Competence",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

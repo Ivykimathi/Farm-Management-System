@@ -73,10 +73,10 @@
    {
    "bold": 1,
    "fieldname": "poultry_shed",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Poultry Shed Blocks",
    "options": "Poultry Batch Blocks",
-   "description": "Select one or more blocks / sheds for this batch."
+   "description": "Add each block this batch occupies and how many chickens are in it."
   },
   {
    "bold": 1,

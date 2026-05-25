@@ -28,3 +28,6 @@ Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged
 2026-05-20 14:11:11,925 ERROR frappe New Exception collected in error log
 Site: farm.local
 Form Dict: {'cmd': 'farm_management_system.savanna_farm_suite.page.sell_packaged_products.sell_packaged_products.get_default_warehouse'}
+2026-05-25 11:59:20,949 ERROR frappe New Exception collected in error log
+Site: farm.local
+Form Dict: {'date_of_collection': '2026-05-25', 'selection_mode': 'Shed', 'poultry_shed': 'Test Shed', 'collected_by': 'HR-EMP-00008', 'rows': '[{"poultry_shed":"Test Shed","animal_product":"Eggs","quantity_collected":78,"product_type":"Whole"},{"poultry_shed":"Test Shed","animal_product":"Eggs","quantity_collected":2,"product_type":"Broken"}]', 'cmd': 'farm_management_system.savanna_farm_suite.doctype.poultry_batches.poultry_batches.create_collection_entry'}

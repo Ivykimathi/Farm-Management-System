@@ -53,16 +53,23 @@ class PackagingCollection(Document):
 
 		self.total_packed = total_packed
 
+		# Block save when any row asks for more packaging stock than is available in the warehouse.
+		self._check_stock_availability()
+
 	def _lookup_units_per_package(self, product, packaging_item):
-		"""Look up units_per_package from PPC by product name only (item_code is unique
-		across both Crop and Animal Products)."""
-		cfg = frappe.db.get_value(
-			"Product Packaging Config",
-			{"product": product, "packaging_item": packaging_item},
-			"units_per_package",
+		"""Look up units_per_package from the Packaging Item's attached_products
+		child table; fall back to the packaging item's capacity."""
+		cfg = frappe.db.sql(
+			"""
+			SELECT units_per_package
+			FROM `tabPackaging Item Product`
+			WHERE parent = %s AND product = %s
+			LIMIT 1
+			""",
+			(packaging_item, product),
 		)
-		if cfg:
-			return cfg
+		if cfg and cfg[0][0]:
+			return cfg[0][0]
 		return frappe.db.get_value("Packaging Item", packaging_item, "capacity")
 
 	def before_submit(self):
@@ -218,6 +225,93 @@ def get_packaged_product_summary():
 	return rows
 
 
+@frappe.whitelist()
+def get_packaging_collection_logs(date_from=None, date_to=None, status=None,
+                                  collected_by=None, packaging_item=None,
+                                  product=None, limit=200):
+	"""Filtered list of Packaging Collections for the Hub Logs panel.
+
+	status: '' (any), '0' draft, '1' submitted, '2' cancelled.
+	packaging_item / product filter to collections that have a matching line item.
+	"""
+	conditions = []
+	params = {}
+
+	if date_from:
+		conditions.append("pc.date >= %(date_from)s")
+		params["date_from"] = date_from
+	if date_to:
+		conditions.append("pc.date <= %(date_to)s")
+		params["date_to"] = date_to
+	if status in ("0", "1", "2", 0, 1, 2):
+		conditions.append("pc.docstatus = %(status)s")
+		params["status"] = int(status)
+	if collected_by:
+		conditions.append("pc.collected_by = %(collected_by)s")
+		params["collected_by"] = collected_by
+	if packaging_item:
+		conditions.append(
+			"EXISTS (SELECT 1 FROM `tabPackaging Collection Item` pli "
+			"WHERE pli.parent = pc.name AND pli.packaging_item = %(pkg)s)"
+		)
+		params["pkg"] = packaging_item
+	if product:
+		conditions.append(
+			"EXISTS (SELECT 1 FROM `tabPackaging Collection Item` pli "
+			"WHERE pli.parent = pc.name AND pli.product = %(prod)s)"
+		)
+		params["prod"] = product
+
+	where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+	try:
+		limit = max(1, min(int(limit), 1000))
+	except Exception:
+		limit = 200
+	params["limit"] = limit
+
+	rows = frappe.db.sql(
+		f"""
+		SELECT
+			pc.name,
+			pc.date,
+			pc.time,
+			pc.collected_by,
+			COALESCE(emp.employee_name, pc.collected_by) AS collected_by_name,
+			pc.warehouse,
+			pc.total_packed,
+			pc.docstatus,
+			(
+				SELECT GROUP_CONCAT(
+					CONCAT(pli.packaging_item, ' × ', CAST(pli.quantity AS DECIMAL(20,2)))
+					ORDER BY pli.idx SEPARATOR ', '
+				)
+				FROM `tabPackaging Collection Item` pli
+				WHERE pli.parent = pc.name
+			) AS packaging_items_used
+		FROM `tabPackaging Collection` pc
+		LEFT JOIN `tabEmployee` emp ON emp.name = pc.collected_by
+		{where_clause}
+		ORDER BY pc.date DESC, pc.time DESC, pc.creation DESC
+		LIMIT %(limit)s
+		""",
+		params,
+		as_dict=True,
+	)
+	return rows
+
+
+def compute_packaged_rate(product, packaging_item):
+	"""Selling rate of the packaged product = product's selling price + packaging item's selling_price."""
+	product_rate = frappe.db.get_value(
+		"Item Price",
+		{"item_code": product, "selling": 1},
+		"price_list_rate",
+		order_by="modified desc",
+	) or frappe.db.get_value("Item", product, "standard_rate") or 0.0
+	pkg_rate = frappe.db.get_value("Packaging Item", packaging_item, "selling_price") or 0.0
+	return float(product_rate) + float(pkg_rate)
+
+
 def ensure_packaged_product_item(product, packaging_item):
 	"""Get or create the Item that represents (product × packaging_item) as a sellable pack.
 
@@ -228,7 +322,13 @@ def ensure_packaged_product_item(product, packaging_item):
 	ensure_packaged_product_group()
 	item_code = f"PKD-{packaging_item}-{product}"[:140]
 
+	rate = compute_packaged_rate(product, packaging_item)
+
 	if frappe.db.exists("Item", item_code):
+		# Refresh standard_rate so price changes (product or packaging selling_price) take effect.
+		current_rate = frappe.db.get_value("Item", item_code, "standard_rate") or 0.0
+		if float(current_rate) != rate:
+			frappe.db.set_value("Item", item_code, "standard_rate", rate, update_modified=False)
 		return item_code
 
 	product_info = frappe.db.get_value("Item", product, ["item_name", "stock_uom"], as_dict=True) or {}
@@ -243,6 +343,7 @@ def ensure_packaged_product_item(product, packaging_item):
 		"is_stock_item": 1,
 		"is_sales_item": 1,
 		"is_purchase_item": 0,
+		"standard_rate": rate,
 		"description": f"Packaged product: {product} in {pkg_name}",
 	})
 	item.insert(ignore_permissions=True)
@@ -296,8 +397,8 @@ def get_products_filter(doctype, txt, searchfield, start, page_len, filters):
 @frappe.whitelist()
 def get_packaging_items_filter(doctype, txt, searchfield, start, page_len, filters):
 	"""Restrict the Packaging Item field to items configured for the row's product
-	(via Product Packaging Config). Falls back to all packaging items if no product
-	is selected on the row.
+	(via the Packaging Item's attached_products child table). Falls back to all
+	packaging items if no product is selected on the row.
 	"""
 	product = (filters or {}).get("product")
 
@@ -306,8 +407,8 @@ def get_packaging_items_filter(doctype, txt, searchfield, start, page_len, filte
 			"""
 			SELECT pi.name, pi.capacity
 			FROM `tabPackaging Item` pi
-			INNER JOIN `tabProduct Packaging Config` ppc ON ppc.packaging_item = pi.name
-			WHERE ppc.product = %(p)s
+			INNER JOIN `tabPackaging Item Product` pip ON pip.parent = pi.name
+			WHERE pip.product = %(p)s
 			  AND pi.name LIKE %(txt)s
 			ORDER BY pi.capacity ASC
 			LIMIT %(start)s, %(page_len)s

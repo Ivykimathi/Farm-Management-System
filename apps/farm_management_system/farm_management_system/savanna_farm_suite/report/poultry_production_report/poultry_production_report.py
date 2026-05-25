@@ -113,8 +113,9 @@ def execute(filters=None):
         {"label": "Block", "fieldname": "block", "fieldtype": "Data", "width": 160},
         {"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 110},
         {"label": "Time", "fieldname": "time", "fieldtype": "Data", "width": 90},
-        {"label": "Collector", "fieldname": "collector_name", "fieldtype": "Data", "width": 150},
+        {"label": "Collected By", "fieldname": "collector_name", "fieldtype": "Data", "width": 150},
         {"label": "Product", "fieldname": "product", "fieldtype": "Link", "options": "Animal Products", "width": 160},
+        {"label": "Type", "fieldname": "type_label", "fieldtype": "Data", "width": 130},
         {"label": "Normal", "fieldname": "normal", "fieldtype": "Float", "width": 100},
         {"label": "Broken", "fieldname": "broken", "fieldtype": "Float", "width": 100},
         {"label": "Abnormal", "fieldname": "abnormal", "fieldtype": "Float", "width": 100},
@@ -171,13 +172,22 @@ def execute(filters=None):
     if not rows:
         return columns, []
 
-    # Pivot: group by (batch, date, time, collector, product, uom); sum each type column
+    # Pivot: group by (batch, date, time, collector, product, uom); sum each type column.
+    # Round time to whole seconds so sub-second drift across rows of one submission
+    # (e.g. 11:16:17.233 vs .235) still groups together.
+    def _whole_seconds(tv):
+        if tv is None:
+            return None
+        if hasattr(tv, "total_seconds"):
+            return timedelta(seconds=int(tv.total_seconds()))
+        return tv
+
     pivot = {}
     for r in rows:
         key = (
             r.get("batch") or "",
             r.get("date"),
-            r.get("time"),
+            _whole_seconds(r.get("time")),
             r.get("collector") or "",
             r.get("product") or "",
             r.get("uom") or "",
@@ -207,6 +217,7 @@ def execute(filters=None):
 
     data = []
     daily_totals = defaultdict(lambda: {"normal": 0.0, "broken": 0.0, "abnormal": 0.0})
+    grand = {"normal": 0.0, "broken": 0.0, "abnormal": 0.0}
 
     sorted_keys = sorted(pivot.keys(), key=lambda k: (k[1] or date.min, k[0], k[2] or timedelta(0)))
     for key in sorted_keys:
@@ -224,6 +235,15 @@ def execute(filters=None):
             block_list = blocks_by_batch.get(batch, [])
             block_label = ", ".join(block_list)
 
+        types_present = []
+        if normal > 0:
+            types_present.append("Whole")
+        if broken > 0:
+            types_present.append("Broken")
+        if abnormal > 0:
+            types_present.append("Abnormal")
+        type_label = ", ".join(types_present)
+
         data.append({
             "batch": batch,
             "block": block_label,
@@ -231,6 +251,7 @@ def execute(filters=None):
             "time": _format_time(time_val),
             "collector_name": collector_names.get(collector, collector),
             "product": product,
+            "type_label": type_label,
             "normal": normal,
             "broken": broken,
             "abnormal": abnormal,
@@ -243,6 +264,16 @@ def execute(filters=None):
         daily_totals[dkey]["broken"] += broken
         daily_totals[dkey]["abnormal"] += abnormal
 
-   
+        grand["normal"] += normal
+        grand["broken"] += broken
+        grand["abnormal"] += abnormal
 
-    return columns, data
+    grand_total = grand["normal"] + grand["broken"] + grand["abnormal"]
+    report_summary = [
+        {"label": "Normal", "value": grand["normal"], "datatype": "Float", "indicator": "Green"},
+        {"label": "Broken", "value": grand["broken"], "datatype": "Float", "indicator": "Red"},
+        {"label": "Abnormal", "value": grand["abnormal"], "datatype": "Float", "indicator": "Orange"},
+        {"label": "Total", "value": grand_total, "datatype": "Float", "indicator": "Blue"},
+    ]
+
+    return columns, data, None, None, report_summary

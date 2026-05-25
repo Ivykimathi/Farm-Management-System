@@ -28,7 +28,6 @@ class PackagingItem(Document):
 	def after_insert(self):
 		self.ensure_linked_item()
 		self.refresh_current_stock()
-		self.sync_attached_products_to_config()
 
 	def on_update(self):
 		if not self.linked_item:
@@ -36,7 +35,6 @@ class PackagingItem(Document):
 		else:
 			self.sync_linked_item()
 		self.refresh_current_stock()
-		self.sync_attached_products_to_config()
 
 	def ensure_linked_item(self):
 		"""Auto-create an ERPNext Item that backs this packaging item for stock tracking."""
@@ -77,67 +75,6 @@ class PackagingItem(Document):
 		qty = get_item_total_stock(self.linked_item) if self.linked_item else 0.0
 		if (self.current_stock or 0.0) != qty:
 			self.db_set("current_stock", qty, update_modified=False)
-
-	def sync_attached_products_to_config(self):
-		"""Keep Product Packaging Config in sync with this packaging item's attached products.
-
-		- Creates a PPC for every (product, this packaging item) pair in the child table.
-		- Updates units_per_package if it changed.
-		- Deletes PPCs for this packaging item that are no longer in the table.
-		"""
-		desired = {}
-		for row in self.attached_products or []:
-			if not row.product or not row.units_per_package:
-				continue
-			ptype = resolve_product_type(row.product)
-			if not ptype:
-				continue
-			desired[row.product] = {
-				"product_type": ptype,
-				"units_per_package": row.units_per_package,
-				"notes": row.notes,
-			}
-
-		existing = frappe.db.get_all(
-			"Product Packaging Config",
-			filters={"packaging_item": self.name},
-			fields=["name", "product", "units_per_package"],
-		)
-		existing_by_product = {e["product"]: e for e in existing}
-
-		# Create or update
-		for product, payload in desired.items():
-			if product in existing_by_product:
-				ppc = existing_by_product[product]
-				if float(ppc["units_per_package"] or 0) != float(payload["units_per_package"]):
-					frappe.db.set_value(
-						"Product Packaging Config", ppc["name"],
-						{"units_per_package": payload["units_per_package"], "notes": payload.get("notes")},
-					)
-			else:
-				doc = frappe.get_doc({
-					"doctype": "Product Packaging Config",
-					"product_type": payload["product_type"],
-					"product": product,
-					"packaging_item": self.name,
-					"units_per_package": payload["units_per_package"],
-					"notes": payload.get("notes"),
-				})
-				doc.insert(ignore_permissions=True)
-
-		# Delete orphans
-		for product, ppc in existing_by_product.items():
-			if product not in desired:
-				frappe.delete_doc("Product Packaging Config", ppc["name"], force=1, ignore_permissions=True)
-
-
-def resolve_product_type(item_name):
-	"""Decide which farm doctype (Animal Products / Crop Products) the item belongs to."""
-	if frappe.db.exists("Animal Products", item_name):
-		return "Animal Product"
-	if frappe.db.exists("Crop Products", item_name):
-		return "Crop Product"
-	return None
 
 
 def ensure_packaging_item_group():

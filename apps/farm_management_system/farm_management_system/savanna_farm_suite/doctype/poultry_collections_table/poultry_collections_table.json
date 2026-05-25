@@ -9,6 +9,7 @@
   "date_of_collection",
   "time_of_collection",
   "milker",
+  "poultry_shed",
   "product_collected",
   "product_type",
   "products_default_uom",
@@ -37,8 +38,16 @@
    "fieldname": "milker",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Milker",
+   "label": "Collected By",
    "options": "Employee",
+   "width": "2"
+  },
+  {
+   "fieldname": "poultry_shed",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Block",
+   "options": "Poultry Shed",
    "width": "2"
   },
   {
@@ -93,7 +102,7 @@
   },
   {
    "bold": 1,
-   "fetch_from": "product_collected.default_uom",
+   "fetch_from": "product_collected.default_unit_of_measure",
    "fetch_if_empty": 1,
    "fieldname": "products_default_uom",
    "fieldtype": "Link",

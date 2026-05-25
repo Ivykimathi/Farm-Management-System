@@ -36,32 +36,71 @@ frappe.ui.form.on('Packaging Collection Item', {
 		const row = locals[cdt][cdn];
 		if (!row.packaging_item) return;
 
-		// units_per_package: try Product Packaging Config, fall back to Packaging Item capacity
-		if (row.product) {
-			frappe.db.get_value('Product Packaging Config', {
-				product: row.product,
-				packaging_item: row.packaging_item
-			}, 'units_per_package').then(r => {
-				const v = (r.message && r.message.units_per_package) || null;
-				if (v) {
-					frappe.model.set_value(cdt, cdn, 'units_per_package', v);
+		// Stock check: fetch current stock fresh and block selection of an out-of-stock item.
+		frappe.db.get_value('Packaging Item', row.packaging_item, 'current_stock').then(sr => {
+			const stock = (sr.message && sr.message.current_stock) || 0;
+			frappe.model.set_value(cdt, cdn, 'current_stock', stock);
+
+			if (stock <= 0) {
+				const name = row.packaging_item;
+				frappe.model.set_value(cdt, cdn, 'packaging_item', null);
+				frappe.msgprint({
+					title: __('Out of Stock'),
+					indicator: 'red',
+					message: __('{0} has no stock available. Replenish before adding it to a collection.', [name])
+				});
+				return;
+			}
+
+			// units_per_package: prefer the Packaging Item's attached_products row matching
+			// the line's product; fall back to the Packaging Item's capacity.
+			const apply_capacity_fallback = () => {
+				frappe.db.get_value('Packaging Item', row.packaging_item, 'capacity').then(rr => {
+					frappe.model.set_value(cdt, cdn, 'units_per_package', (rr.message || {}).capacity || 0);
 					recalc_row(cdt, cdn, frm);
-				} else {
-					frappe.db.get_value('Packaging Item', row.packaging_item, 'capacity').then(rr => {
-						frappe.model.set_value(cdt, cdn, 'units_per_package', (rr.message || {}).capacity || 0);
-						recalc_row(cdt, cdn, frm);
-					});
-				}
-			});
-		} else {
-			frappe.db.get_value('Packaging Item', row.packaging_item, 'capacity').then(rr => {
-				frappe.model.set_value(cdt, cdn, 'units_per_package', (rr.message || {}).capacity || 0);
-				recalc_row(cdt, cdn, frm);
-			});
-		}
+				});
+			};
+
+			if (row.product) {
+				frappe.call({
+					method: 'frappe.client.get_list',
+					args: {
+						doctype: 'Packaging Item Product',
+						filters: { parent: row.packaging_item, product: row.product },
+						fields: ['units_per_package'],
+						parent: 'Packaging Item',
+						limit_page_length: 1
+					},
+					callback: (r) => {
+						const v = (r.message && r.message[0] && r.message[0].units_per_package) || null;
+						if (v) {
+							frappe.model.set_value(cdt, cdn, 'units_per_package', v);
+							recalc_row(cdt, cdn, frm);
+						} else {
+							apply_capacity_fallback();
+						}
+					}
+				});
+			} else {
+				apply_capacity_fallback();
+			}
+		});
 	},
 
 	quantity(frm, cdt, cdn) {
+		const row = locals[cdt][cdn];
+		const stock = row.current_stock || 0;
+		if (row.packaging_item && row.quantity && row.quantity > stock) {
+			const requested = row.quantity;
+			const pkg = row.packaging_item;
+			frappe.model.set_value(cdt, cdn, 'quantity', stock);
+			frappe.msgprint({
+				title: __('Not enough stock'),
+				indicator: 'red',
+				message: __('You asked for <b>{0}</b> packs of <b>{1}</b> but only <b>{2}</b> are in stock. Quantity reset to <b>{2}</b>.', [requested, pkg, stock])
+			});
+			return;
+		}
 		recalc_row(cdt, cdn, frm);
 	},
 

@@ -13,13 +13,17 @@
   "column_break_uom",
   "default_warehouse",
   "purchase_rate",
+  "selling_price",
   "linked_item",
   "section_stock",
   "current_stock",
   "notes",
   "tab_products",
   "attached_products_intro",
-  "attached_products"
+  "attached_products",
+  "tab_components",
+  "components_intro",
+  "components"
  ],
  "fields": [
   {
@@ -73,6 +77,14 @@
    "non_negative": 1
   },
   {
+   "bold": 1,
+   "fieldname": "selling_price",
+   "fieldtype": "Currency",
+   "label": "Selling Price",
+   "description": "Added on top of the underlying product's price when this packaging item is sold as a packaged product.",
+   "non_negative": 1
+  },
+  {
    "fieldname": "linked_item",
    "fieldtype": "Link",
    "label": "Linked ERPNext Item",
@@ -113,6 +125,22 @@
    "fieldtype": "Table",
    "label": "Products",
    "options": "Packaging Item Product"
+  },
+  {
+   "fieldname": "tab_components",
+   "fieldtype": "Tab Break",
+   "label": "Components"
+  },
+  {
+   "fieldname": "components_intro",
+   "fieldtype": "HTML",
+   "options": "<div class='text-muted small'>Attach every material that makes up one <b>complete</b> package &mdash; e.g. a 2-pack egg tray needs the tray itself, wrapping paper, a sticker, etc. Each component is a stock Item with its own inventory, so you can purchase and track them separately.</div>"
+  },
+  {
+   "fieldname": "components",
+   "fieldtype": "Table",
+   "label": "Components",
+   "options": "Packaging Item Component"
   }
  ],
  "grid_page_length": 50,
@@ -138,7 +166,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",

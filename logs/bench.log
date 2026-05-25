@@ -396,3 +396,89 @@
 2026-05-21 11:45:33,835 INFO /usr/local/bin/bench worker
 2026-05-21 11:45:33,837 INFO /usr/local/bin/bench schedule
 2026-05-21 12:00:01,899 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-22 13:53:45,816 INFO /usr/local/bin/bench start
+2026-05-22 13:53:46,547 INFO /usr/local/bin/bench serve --port 8000
+2026-05-22 13:53:46,606 INFO /usr/local/bin/bench watch
+2026-05-22 13:53:46,702 INFO /usr/local/bin/bench schedule
+2026-05-22 13:53:46,744 INFO /usr/local/bin/bench worker
+2026-05-22 13:58:59,049 INFO /usr/local/bin/bench --site farm.local export-fixtures
+2026-05-22 15:17:26,923 INFO /usr/local/bin/bench migrate
+2026-05-25 09:36:25,175 INFO /usr/local/bin/bench start
+2026-05-25 09:36:26,090 INFO /usr/local/bin/bench schedule
+2026-05-25 09:36:26,170 INFO /usr/local/bin/bench serve --port 8000
+2026-05-25 09:36:26,176 INFO /usr/local/bin/bench worker
+2026-05-25 09:36:26,178 INFO /usr/local/bin/bench watch
+2026-05-25 09:46:05,629 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 09:46:34,059 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:00:12,445 INFO /usr/local/bin/bench --site farm.local execute frappe.db.count --args ["Packaging Item Purchase"]
+2026-05-25 10:00:15,060 INFO /usr/local/bin/bench --site farm.local execute frappe.db.count --args ["Product Packaging Config"]
+2026-05-25 10:09:02,529 INFO /usr/local/bin/bench --site farm.local console
+2026-05-25 10:09:40,135 INFO /usr/local/bin/bench --site farm.local console
+2026-05-25 10:10:22,482 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "DELETE FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND link_to IN ('Packaging Item Purchase','Product Packaging Config')"}
+2026-05-25 10:10:23,442 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "COMMIT"}
+2026-05-25 10:10:24,383 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT idx,label,link_to FROM `tabWorkspace Link` WHERE parent='Farm Management System' AND idx BETWEEN 5 AND 12 ORDER BY idx"}
+2026-05-25 10:11:50,411 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 10:12:08,781 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:12:20,765 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType","Packaging Item Purchase"]
+2026-05-25 10:12:22,065 INFO /usr/local/bin/bench --site farm.local execute frappe.db.exists --args ["DocType","Product Packaging Config"]
+2026-05-25 10:12:23,368 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabPackaging Collection` WHERE Field IN ('date','time','collected_by')"}
+2026-05-25 10:23:42,167 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 10:24:01,775 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:24:16,523 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT fieldname, fieldtype, options FROM `tabDocField` WHERE parent='Packaging Collection' AND fieldname='collected_by'"}
+2026-05-25 10:24:17,920 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabPackaging Item` WHERE Field='selling_price'"}
+2026-05-25 10:30:27,133 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:33:12,708 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT pc.name AS collection, pc.docstatus, pli.idx, pli.product, pli.packaging_item, pli.linked_item, pli.quantity FROM `tabPackaging Collection` pc JOIN `tabPackaging Collection Item` pli ON pli.parent=pc.name WHERE pc.docstatus = 0 ORDER BY pc.modified DESC, pli.idx LIMIT 20"}
+2026-05-25 10:33:35,541 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT warehouse, actual_qty, reserved_qty, projected_qty FROM `tabBin` WHERE item_code='PKG-2-Pack Egg Tray'"}
+2026-05-25 10:33:36,820 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT se.name, se.docstatus, se.stock_entry_type, sed.qty, sed.s_warehouse, sed.t_warehouse, se.modified FROM `tabStock Entry` se JOIN `tabStock Entry Detail` sed ON sed.parent=se.name WHERE sed.item_code='PKG-2-Pack Egg Tray' ORDER BY se.modified DESC LIMIT 10"}
+2026-05-25 10:34:09,377 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT name, creation, LEFT(error,500) AS err FROM `tabError Log` WHERE error LIKE '%PKG-2-Pack%' OR error LIKE '%27.0%' ORDER BY creation DESC LIMIT 3"}
+2026-05-25 10:34:10,395 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT pc.name, pc.docstatus, pc.warehouse, pli.idx, pli.product, pli.packaging_item, pli.linked_item, pli.quantity, pli.total_units FROM `tabPackaging Collection` pc JOIN `tabPackaging Collection Item` pli ON pli.parent=pc.name WHERE pc.docstatus IN (0,1) ORDER BY pc.creation DESC"}
+2026-05-25 10:35:25,960 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT se.name, se.docstatus AS ds, se.stock_entry_type, se.posting_date, sed.qty, sed.s_warehouse, sed.t_warehouse FROM `tabStock Entry` se JOIN `tabStock Entry Detail` sed ON sed.parent=se.name WHERE sed.item_code='PKG-2-Pack Egg Tray' ORDER BY se.creation"}
+2026-05-25 10:35:27,482 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT warehouse, actual_qty, reserved_qty, ordered_qty, projected_qty FROM `tabBin` WHERE item_code='PKG-2-Pack Egg Tray'"}
+2026-05-25 10:35:55,123 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT name, docstatus, date, time, warehouse, total_packed FROM `tabPackaging Collection` WHERE name='PKG-2026-00003'"}
+2026-05-25 10:35:56,183 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT posting_date, voucher_type, voucher_no, actual_qty, qty_after_transaction, is_cancelled FROM `tabStock Ledger Entry` WHERE item_code='PKG-2-Pack Egg Tray' ORDER BY posting_date, posting_time, creation"}
+2026-05-25 10:37:43,016 INFO /usr/local/bin/bench --site farm.local console
+2026-05-25 10:38:35,762 INFO /usr/local/bin/bench --site farm.local console
+2026-05-25 10:39:07,390 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT posting_date, posting_time, voucher_type, voucher_no, actual_qty, qty_after_transaction, is_cancelled FROM `tabStock Ledger Entry` WHERE item_code='PKG-2-Pack Egg Tray' ORDER BY posting_date, posting_time, creation"}
+2026-05-25 10:39:08,414 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT warehouse, actual_qty, valuation_rate FROM `tabBin` WHERE item_code='PKG-2-Pack Egg Tray'"}
+2026-05-25 10:40:02,656 INFO /usr/local/bin/bench --site farm.local console
+2026-05-25 10:40:04,351 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:45:21,092 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:45:23,611 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.packaging_collection.packaging_collection.get_packaging_collection_logs
+2026-05-25 10:48:55,732 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:48:57,512 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-25 10:54:29,481 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:54:31,728 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-25 10:56:38,034 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:56:39,648 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-25 10:59:11,389 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 10:59:14,013 INFO /usr/local/bin/bench build --app farm_management_system
+2026-05-25 10:59:18,173 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.packaging_collection.packaging_collection.get_packaging_collection_logs
+2026-05-25 11:06:45,557 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:11:26,975 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:14:27,828 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT pct.parent AS batch, pct.date_of_collection, pct.time_of_collection, pct.product_collected, pct.product_type, pct.quantity_collected, pct.normal_eggs, pct.broken_eggs, pct.abnormal_eggs FROM `tabPoultry Collections Table` pct WHERE pct.date_of_collection >= '2026-05-01' ORDER BY pct.date_of_collection DESC, pct.time_of_collection DESC LIMIT 30"}
+2026-05-25 11:15:14,916 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:17:45,735 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SELECT date_of_collection, CAST(time_of_collection AS CHAR) AS t, product_type, quantity_collected FROM `tabPoultry Collections Table` WHERE date_of_collection='2026-05-25' ORDER BY time_of_collection"}
+2026-05-25 11:19:06,697 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:24:27,417 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:28:00,776 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 11:28:19,915 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:30:09,049 INFO /usr/local/bin/bench migrate
+2026-05-25 11:32:31,929 INFO /usr/local/bin/bench --site farm.local export-fixtures
+2026-05-25 11:56:40,553 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 11:57:02,802 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 11:57:34,856 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabPoultry Batch Blocks` WHERE Field='chicken_count'"}
+2026-05-25 11:57:37,283 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabPoultry Collections Table` WHERE Field='poultry_shed'"}
+2026-05-25 11:57:39,385 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.poultry_shed.poultry_shed.get_block_logs --args ["Test Shed"]
+2026-05-25 12:00:02,310 INFO /usr/local/bin/bench --verbose --site all backup
+2026-05-25 12:00:21,554 INFO /usr/local/bin/bench --site farm.local execute frappe.db.sql --kwargs {'query': "SHOW COLUMNS FROM `tabAnimal Products` WHERE Field LIKE '%uom%' OR Field LIKE '%unit%'"}
+2026-05-25 12:00:51,333 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 12:01:14,570 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:06:16,971 INFO /usr/local/bin/bench --site farm.local migrate
+2026-05-25 12:06:59,525 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:13:12,691 INFO /usr/local/bin/bench --site farm.local execute farm_management_system.savanna_farm_suite.doctype.poultry_batches.poultry_batches.recompute_all_shed_chicken_counts
+2026-05-25 12:13:25,995 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:17:00,843 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:21:55,045 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:23:34,434 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:25:43,160 INFO /usr/local/bin/bench --site farm.local clear-cache
+2026-05-25 12:25:44,897 INFO /usr/local/bin/bench build --app farm_management_system

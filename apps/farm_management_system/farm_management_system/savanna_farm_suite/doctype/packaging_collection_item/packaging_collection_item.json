@@ -85,9 +85,11 @@
    "fetch_from": "packaging_item.current_stock",
    "fieldname": "current_stock",
    "fieldtype": "Float",
-   "label": "Available Stock",
+   "in_list_view": 1,
+   "label": "In Stock",
    "precision": "3",
-   "read_only": 1
+   "read_only": 1,
+   "columns": 1
   },
   {
    "fieldname": "stock_entry_reference",

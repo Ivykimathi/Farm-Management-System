@@ -11,14 +11,6 @@ frappe.ui.form.on('Packaging Item', {
 					callback: function () { frm.reload_doc(); }
 				});
 			});
-
-			if (frm.doc.linked_item) {
-				frm.add_custom_button(__('Record Purchase'), function () {
-					frappe.new_doc('Packaging Item Purchase', {
-						packaging_item: frm.doc.name
-					});
-				});
-			}
 		}
 
 		// Restrict the Attached Products → Product dropdown to farm products

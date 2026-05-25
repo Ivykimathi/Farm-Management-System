@@ -436,3 +436,212 @@ else:
 2026-05-20 12:59:38,938 INFO ipython     frappe.db.commit()
 2026-05-20 12:59:38,939 INFO ipython     print(f"Inserted Sell Packaged Products at idx {target_idx}")
 2026-05-20 12:59:38,939 INFO ipython === session end ===
+2026-05-25 10:09:05,071 INFO ipython === bench console session ===
+2026-05-25 10:09:05,077 INFO ipython import frappe
+2026-05-25 10:09:05,078 INFO ipython # Delete all docs of both types, then delete the DocType meta, then drop tables.
+2026-05-25 10:09:05,078 INFO ipython for dt in ("Packaging Item Purchase", "Product Packaging Config"):
+    if not frappe.db.exists("DocType", dt):
+        print(f"{dt}: DocType not registered, skipping")
+        continue
+    rows = frappe.get_all(dt, pluck="name")
+    for r in rows:
+        try:
+            frappe.delete_doc(dt, r, force=1, ignore_permissions=True, delete_permanently=True)
+        except Exception as e:
+            print(f"  could not delete {dt} {r}: {e}")
+    print(f"{dt}: deleted {len(rows)} records")
+2026-05-25 10:09:05,078 INFO ipython     # Delete the DocType meta itself
+2026-05-25 10:09:05,079 INFO ipython     try:
+        frappe.delete_doc("DocType", dt, force=1, ignore_permissions=True)
+        print(f"{dt}: DocType meta removed")
+    except Exception as e:
+        print(f"  could not remove DocType meta for {dt}: {e}")
+2026-05-25 10:09:05,079 INFO ipython     # Drop the table (delete_doc on DocType usually drops it, but be explicit)
+2026-05-25 10:09:05,079 INFO ipython     table = f"tab{dt}"
+2026-05-25 10:09:05,079 INFO ipython     try:
+        frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `{table}`")
+        print(f"{dt}: table {table} dropped")
+    except Exception as e:
+        print(f"  could not drop table {table}: {e}")
+2026-05-25 10:09:05,079 INFO ipython frappe.db.commit()
+2026-05-25 10:09:05,080 INFO ipython print("DONE")
+2026-05-25 10:09:05,080 INFO ipython === session end ===
+2026-05-25 10:09:42,183 INFO ipython === bench console session ===
+2026-05-25 10:09:42,183 INFO ipython import frappe
+2026-05-25 10:09:42,184 INFO ipython dt = "Packaging Item Purchase"
+2026-05-25 10:09:42,184 INFO ipython # Cancel any submitted docs first
+2026-05-25 10:09:42,185 INFO ipython rows = frappe.get_all(dt, fields=["name", "docstatus"])
+2026-05-25 10:09:42,185 INFO ipython for r in rows:
+    if r.docstatus == 1:
+        try:
+            doc = frappe.get_doc(dt, r.name)
+            doc.flags.ignore_links = True
+            doc.cancel()
+            print(f"cancelled {r.name}")
+        except Exception as e:
+            print(f"could not cancel {r.name}: {e}")
+            # Force update docstatus directly
+            frappe.db.sql(f"UPDATE `tab{dt}` SET docstatus = 2 WHERE name = %s", (r.name,))
+            frappe.db.commit()
+2026-05-25 10:09:42,185 INFO ipython # Now delete every record
+2026-05-25 10:09:42,186 INFO ipython rows = frappe.get_all(dt, pluck="name")
+2026-05-25 10:09:42,186 INFO ipython for r in rows:
+    try:
+        frappe.delete_doc(dt, r, force=1, ignore_permissions=True, delete_permanently=True)
+    except Exception as e:
+        print(f"force-deleting {r} via SQL: {e}")
+        frappe.db.sql(f"DELETE FROM `tab{dt}` WHERE name = %s", (r,))
+2026-05-25 10:09:42,186 INFO ipython # Delete the DocType meta
+2026-05-25 10:09:42,187 INFO ipython try:
+    frappe.delete_doc("DocType", dt, force=1, ignore_permissions=True)
+    print(f"{dt}: DocType meta removed")
+except Exception as e:
+    print(f"  could not remove DocType meta: {e}")
+2026-05-25 10:09:42,187 INFO ipython # Drop the table
+2026-05-25 10:09:42,187 INFO ipython frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `tab{dt}`")
+2026-05-25 10:09:42,187 INFO ipython print(f"{dt}: table dropped")
+2026-05-25 10:09:42,188 INFO ipython frappe.db.commit()
+2026-05-25 10:09:42,188 INFO ipython print("DONE")
+2026-05-25 10:09:42,188 INFO ipython === session end ===
+2026-05-25 10:37:49,522 INFO ipython === bench console session ===
+2026-05-25 10:37:49,529 INFO ipython import frappe
+2026-05-25 10:37:49,529 INFO ipython ITEM = "PKG-2-Pack Egg Tray"
+2026-05-25 10:37:49,529 INFO ipython WAREHOUSE = "Stores - WF"
+2026-05-25 10:37:49,530 INFO ipython TARGET_QTY = 4.0
+2026-05-25 10:37:49,530 INFO ipython # Get a sensible valuation rate
+2026-05-25 10:37:49,530 INFO ipython val_rate = (
+    frappe.db.get_value("Bin", {"item_code": ITEM, "warehouse": WAREHOUSE}, "valuation_rate")
+    or frappe.db.get_value("Item", ITEM, "standard_rate")
+    or frappe.db.get_value("Item", ITEM, "valuation_rate")
+    or 0
+)
+2026-05-25 10:37:49,530 INFO ipython print(f"using valuation_rate = {val_rate}")
+2026-05-25 10:37:49,531 INFO ipython sr = frappe.get_doc({
+    "doctype": "Stock Reconciliation",
+    "purpose": "Stock Reconciliation",
+    "company": frappe.db.get_single_value("Global Defaults", "default_company")
+               or frappe.db.get_value("Company", {}, "name"),
+    "posting_date": frappe.utils.nowdate(),
+    "posting_time": frappe.utils.nowtime(),
+    "set_posting_time": 1,
+    "items": [
+        {
+            "item_code": ITEM,
+            "warehouse": WAREHOUSE,
+            "qty": TARGET_QTY,
+            "valuation_rate": val_rate,
+        }
+    ],
+})
+2026-05-25 10:37:49,531 INFO ipython sr.insert(ignore_permissions=True)
+2026-05-25 10:37:49,531 INFO ipython sr.submit()
+2026-05-25 10:37:49,532 INFO ipython frappe.db.commit()
+2026-05-25 10:37:49,532 INFO ipython print(f"created and submitted Stock Reconciliation: {sr.name}")
+2026-05-25 10:37:49,532 INFO ipython # Verify post-reconciliation state
+2026-05-25 10:37:49,532 INFO ipython bal = frappe.db.sql(
+    "SELECT qty_after_transaction FROM `tabStock Ledger Entry` "
+    "WHERE item_code=%s AND warehouse=%s AND is_cancelled=0 "
+    "ORDER BY posting_date DESC, posting_time DESC, creation DESC LIMIT 1",
+    (ITEM, WAREHOUSE),
+)
+2026-05-25 10:37:49,533 INFO ipython print(f"latest SLE balance for {ITEM} @ {WAREHOUSE}: {bal[0][0] if bal else 'N/A'}")
+2026-05-25 10:37:49,533 INFO ipython bin_qty = frappe.db.get_value("Bin", {"item_code": ITEM, "warehouse": WAREHOUSE}, "actual_qty")
+2026-05-25 10:37:49,533 INFO ipython print(f"Bin actual_qty: {bin_qty}")
+2026-05-25 10:37:49,533 INFO ipython === session end ===
+2026-05-25 10:38:46,525 INFO ipython === bench console session ===
+2026-05-25 10:38:46,526 INFO ipython import frappe
+2026-05-25 10:38:46,526 INFO ipython ITEM = "PKG-2-Pack Egg Tray"
+2026-05-25 10:38:46,527 INFO ipython WAREHOUSE = "Stores - WF"
+2026-05-25 10:38:46,527 INFO ipython TARGET_QTY = 4.0
+2026-05-25 10:38:46,528 INFO ipython settings = frappe.get_single("Stock Settings")
+2026-05-25 10:38:46,528 INFO ipython original_allow = settings.allow_negative_stock
+2026-05-25 10:38:46,528 INFO ipython print(f"original allow_negative_stock = {original_allow}")
+2026-05-25 10:38:46,529 INFO ipython try:
+    if not original_allow:
+        settings.allow_negative_stock = 1
+        settings.save()
+        print("temporarily enabled allow_negative_stock")
+
+    val_rate = (
+        frappe.db.get_value("Bin", {"item_code": ITEM, "warehouse": WAREHOUSE}, "valuation_rate")
+        or frappe.db.get_value("Item", ITEM, "standard_rate")
+        or 20.0
+    )
+
+    sr = frappe.get_doc({
+        "doctype": "Stock Reconciliation",
+        "purpose": "Stock Reconciliation",
+        "company": frappe.db.get_single_value("Global Defaults", "default_company")
+                   or frappe.db.get_value("Company", {}, "name"),
+        "posting_date": frappe.utils.nowdate(),
+        "posting_time": frappe.utils.nowtime(),
+        "set_posting_time": 1,
+        "items": [
+            {
+                "item_code": ITEM,
+                "warehouse": WAREHOUSE,
+                "qty": TARGET_QTY,
+                "valuation_rate": val_rate,
+            }
+        ],
+    })
+    sr.insert(ignore_permissions=True)
+    sr.submit()
+    print(f"submitted Stock Reconciliation {sr.name}")
+
+finally:
+    settings = frappe.get_single("Stock Settings")
+    if settings.allow_negative_stock != original_allow:
+        settings.allow_negative_stock = original_allow
+        settings.save()
+        print(f"restored allow_negative_stock = {original_allow}")
+2026-05-25 10:38:46,529 INFO ipython frappe.db.commit()
+2026-05-25 10:38:46,530 INFO ipython bal = frappe.db.sql(
+    "SELECT qty_after_transaction FROM `tabStock Ledger Entry` "
+    "WHERE item_code=%s AND warehouse=%s AND is_cancelled=0 "
+    "ORDER BY posting_date DESC, posting_time DESC, creation DESC LIMIT 1",
+    (ITEM, WAREHOUSE),
+)
+2026-05-25 10:38:46,530 INFO ipython print(f"latest SLE balance: {bal[0][0] if bal else 'N/A'}")
+2026-05-25 10:38:46,530 INFO ipython print(f"Bin actual_qty: {frappe.db.get_value('Bin', {'item_code': ITEM, 'warehouse': WAREHOUSE}, 'actual_qty')}")
+2026-05-25 10:38:46,531 INFO ipython === session end ===
+2026-05-25 10:40:03,918 INFO ipython === bench console session ===
+2026-05-25 10:40:03,918 INFO ipython import frappe
+2026-05-25 10:40:03,918 INFO ipython ITEM = "PKG-2-Pack Egg Tray"
+2026-05-25 10:40:03,919 INFO ipython WAREHOUSE = "Stores - WF"
+2026-05-25 10:40:03,919 INFO ipython # Get true balance from latest SLE
+2026-05-25 10:40:03,919 INFO ipython latest = frappe.db.sql(
+    """
+    SELECT qty_after_transaction, stock_value, valuation_rate
+    FROM `tabStock Ledger Entry`
+    WHERE item_code=%s AND warehouse=%s AND is_cancelled=0
+    ORDER BY posting_date DESC, posting_time DESC, creation DESC
+    LIMIT 1
+    """,
+    (ITEM, WAREHOUSE),
+    as_dict=True,
+)
+2026-05-25 10:40:03,919 INFO ipython print(f"latest SLE: {latest}")
+2026-05-25 10:40:03,920 INFO ipython bin_name = frappe.db.get_value("Bin", {"item_code": ITEM, "warehouse": WAREHOUSE}, "name")
+2026-05-25 10:40:03,920 INFO ipython print(f"Bin name: {bin_name}")
+2026-05-25 10:40:03,920 INFO ipython if bin_name and latest:
+    qty = latest[0].qty_after_transaction or 0
+    sv = latest[0].stock_value or 0
+    vr = latest[0].valuation_rate or 0
+    frappe.db.set_value("Bin", bin_name, {
+        "actual_qty": qty,
+        "stock_value": sv,
+        "valuation_rate": vr,
+        "projected_qty": qty,
+    })
+    frappe.db.commit()
+    print(f"Bin synced: actual_qty={qty}, stock_value={sv}, valuation_rate={vr}")
+2026-05-25 10:40:03,920 INFO ipython # verify
+2026-05-25 10:40:03,921 INFO ipython b = frappe.db.get_value("Bin", {"item_code": ITEM, "warehouse": WAREHOUSE},
+                       ["actual_qty","valuation_rate","stock_value"], as_dict=True)
+2026-05-25 10:40:03,921 INFO ipython print(f"Bin now: {b}")
+2026-05-25 10:40:03,921 INFO ipython # Also refresh the Packaging Item's current_stock cache
+2026-05-25 10:40:03,921 INFO ipython pi = frappe.get_doc("Packaging Item", "2-Pack Egg Tray")
+2026-05-25 10:40:03,922 INFO ipython pi.refresh_current_stock()
+2026-05-25 10:40:03,922 INFO ipython print(f"Packaging Item current_stock = {pi.current_stock}")
+2026-05-25 10:40:03,922 INFO ipython === session end ===

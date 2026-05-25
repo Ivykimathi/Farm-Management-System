@@ -9,6 +9,8 @@
  "field_order": [
   "naming_series",
   "date",
+  "time",
+  "collected_by",
   "column_break_header",
   "warehouse",
   "section_packages",
@@ -34,6 +36,22 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Date of Packaging",
+   "reqd": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Time of Packaging",
+   "reqd": 1
+  },
+  {
+   "fieldname": "collected_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Collected By",
+   "options": "Employee",
    "reqd": 1
   },
   {

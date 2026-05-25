@@ -19,44 +19,17 @@ frappe.listview_settings['Poultry Batches'] = {
                         default: 'Batch'
                     },
                     {
-                        fieldtype: 'Link',
-                        fieldname: 'animal',
-                        label: __('Specify Animal'),
-                        options: 'Animals',
-                        default: "Chicken",
-                        depends_on: 'eval:doc.selection_mode == "Batch"',
-                        reqd: 0 
-                    },
-                    {
-                        fieldtype: 'Link',
-                        fieldname: 'poultry_shed',
-                        label: __('Specify Poultry Block'),
-                        options: 'Poultry Shed',
-                        depends_on: 'eval:doc.selection_mode == "Shed"',
-                        onchange: function () {
-                            const shed = this.get_value();
-                            if (!shed) {
-                                clear_production_table();
-                                set_batch_query();
-                                return;
-                            }
-
-                            frappe.db.get_value('Poultry Shed', shed, 'poultry_batch')
-                                .then(r => {
-                                    const batch = r && r.message && r.message.poultry_batch;
-                                    set_batch_query_by_shed(shed);
-
-                                    if (dialog.get_value('selection_mode') === 'Shed') {
-                                        populate_rows_for_shed(batch, shed);
-                                    }
-                                });
-                        }
-                    },
-                    {
                         fieldtype: 'Date',
                         fieldname: 'date_of_collection',
                         label: __('Date of Collection'),
                         default: frappe.datetime.get_today(),
+                        reqd: 1
+                    },
+                    {
+                        fieldtype: 'Link',
+                        fieldname: 'collected_by',
+                        label: __('Collected By'),
+                        options: 'Employee',
                         reqd: 1
                     },
                     {
@@ -142,9 +115,11 @@ frappe.listview_settings['Poultry Batches'] = {
                             }
                         }
 
+                        const row_shed = row.poultry_shed || dvalues.poultry_shed || null;
                         if (normal_qty > 0) {
                             transformed_rows.push({
                                 poultry_batch: row.poultry_batch,
+                                poultry_shed: row_shed,
                                 animal_product: row.animal_product,
                                 default_uom: row.default_uom,
                                 quantity_collected: normal_qty,
@@ -154,6 +129,7 @@ frappe.listview_settings['Poultry Batches'] = {
                         if (broken_qty > 0) {
                             transformed_rows.push({
                                 poultry_batch: row.poultry_batch,
+                                poultry_shed: row_shed,
                                 animal_product: row.animal_product,
                                 default_uom: row.default_uom,
                                 quantity_collected: broken_qty,
@@ -163,6 +139,7 @@ frappe.listview_settings['Poultry Batches'] = {
                         if (abnormal_qty > 0) {
                             transformed_rows.push({
                                 poultry_batch: row.poultry_batch,
+                                poultry_shed: row_shed,
                                 animal_product: row.animal_product,
                                 default_uom: row.default_uom,
                                 quantity_collected: abnormal_qty,
@@ -189,6 +166,7 @@ frappe.listview_settings['Poultry Batches'] = {
                                     date_of_collection: dvalues.date_of_collection,
                                     selection_mode: dvalues.selection_mode,
                                     poultry_shed: dvalues.poultry_shed,
+                                    collected_by: dvalues.collected_by,
                                     rows: rows_to_send
                                 },
                                 callback: function (r) {

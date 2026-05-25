@@ -7,16 +7,27 @@
  "engine": "InnoDB",
  "field_order": [
   "poultry_shed",
+  "chicken_count",
   "poultry_batch"
  ],
  "fields": [
   {
    "fieldname": "poultry_shed",
    "fieldtype": "Link",
-   "label": "Poultry Shed",
+   "label": "Block",
    "options": "Poultry Shed",
    "in_list_view": 1,
-   "reqd": 1
+   "reqd": 1,
+   "columns": 4
+  },
+  {
+   "bold": 1,
+   "fieldname": "chicken_count",
+   "fieldtype": "Int",
+   "label": "Chickens in Block",
+   "in_list_view": 1,
+   "non_negative": 1,
+   "columns": 3
   },
   {
    "fieldname": "poultry_batch",

@@ -78,8 +78,12 @@ fixtures = [
     {
         "dt": "Client Script",
         "filters": [["name", "in", [
+            "Sheep Collection",
+            "Rabbit Collection",
             "Collections for Poultry Batch",
-            "Collection - Poultry Form",
+            "Pig Collection",
+            "Goat Collection",
+            "Collection - Cattle List"
         ]]]
     },
     # "Naming Series" fixture removed — the Naming Series DocType was deprecated in
@@ -103,10 +107,10 @@ fixtures = [
     #     "dt": "Location",
     #     "filters": [["name", "in", ["Default"]]]
     # },
-    # {
-    #     "dt": "Workspace",
-    #     "filters": [["name", "in", ["Farm Management System"]]]
-    # }
+    {
+        "dt": "Workspace",
+        "filters": [["name", "in", ["Farm Management System"]]]
+    }
 ]
 
 calendars = ["Farm Activity Schedule"]

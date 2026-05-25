@@ -26,6 +26,32 @@ class PoultryBatches(Document):
 				if not row.get("poultry_batch") and self.name:
 					row.poultry_batch = self.name
 
+	def on_update(self):
+		self._refresh_shed_chicken_counts()
+
+	def on_trash(self):
+		# Capture sheds before child rows disappear so we can recompute after delete.
+		self._sheds_to_refresh = list({
+			r.poultry_shed
+			for fieldname in ("poultry_shed_blocks", "poultry_shed")
+			for r in (self.get(fieldname) or [])
+			if r.get("poultry_shed")
+		})
+
+	def after_delete(self):
+		for shed in getattr(self, "_sheds_to_refresh", []):
+			_recompute_shed_chicken_count(shed)
+
+	def _refresh_shed_chicken_counts(self):
+		sheds = {
+			r.poultry_shed
+			for fieldname in ("poultry_shed_blocks", "poultry_shed")
+			for r in (self.get(fieldname) or [])
+			if r.get("poultry_shed")
+		}
+		for shed in sheds:
+			_recompute_shed_chicken_count(shed)
+
 	def after_insert(self):
 		"""Enqueue background job to generate AI image for the animal batch."""
 		# Enqueue the image generation job
@@ -36,6 +62,38 @@ class PoultryBatches(Document):
 			queue="long"
 		)
 		self.db_set("batch_status", "Active", update_modified=True)
+		# Re-run after batch_status flips to Active so the shed totals reflect it.
+		self._refresh_shed_chicken_counts()
+
+
+def _recompute_shed_chicken_count(shed):
+	"""Sum chicken_count across active Poultry Batches that include this shed."""
+	if not shed or not frappe.db.exists("Poultry Shed", shed):
+		return
+	total = frappe.db.sql(
+		"""
+		SELECT COALESCE(SUM(pbb.chicken_count), 0)
+		FROM `tabPoultry Batch Blocks` pbb
+		INNER JOIN `tabPoultry Batches` pb ON pb.name = pbb.parent
+		WHERE pbb.parenttype = 'Poultry Batches'
+		  AND pbb.poultry_shed = %s
+		  AND (pb.batch_status IS NULL OR pb.batch_status = 'Active')
+		""",
+		(shed,),
+	)[0][0]
+	frappe.db.set_value(
+		"Poultry Shed", shed, "current_poultry_count", int(total or 0), update_modified=False
+	)
+
+
+@frappe.whitelist()
+def recompute_all_shed_chicken_counts():
+	"""One-off: refresh current_poultry_count on every Poultry Shed from active batches."""
+	sheds = [s.name for s in frappe.get_all("Poultry Shed", fields=["name"])]
+	for shed in sheds:
+		_recompute_shed_chicken_count(shed)
+	frappe.db.commit()
+	return {"updated": len(sheds)}
 
 def _resolve_batch_for_shed(shed):
     """Find the active Poultry Batch that owns a given Poultry Shed.
@@ -342,7 +400,7 @@ from erpnext.accounts.utils import get_fiscal_year
 from collections import defaultdict
 
 @frappe.whitelist()
-def create_collection_entry(date_of_collection, rows, selection_mode=None, poultry_shed=None):
+def create_collection_entry(date_of_collection, rows, selection_mode=None, poultry_shed=None, collected_by=None):
     """
     rows is expected to be a list of dicts:
     [{ "poultry_batch": "...", "animal_product": "...", "default_uom": "...", "quantity_collected": 1.5 }, ...]
@@ -359,6 +417,11 @@ def create_collection_entry(date_of_collection, rows, selection_mode=None, poult
 
     if not rows or len(rows) == 0:
         frappe.throw(_("No product rows provided"), frappe.ValidationError)
+
+    if not collected_by:
+        frappe.throw(_("Collected By is required"), frappe.ValidationError)
+    if not frappe.db.exists("Employee", collected_by):
+        frappe.throw(_("Employee {0} does not exist").format(collected_by), frappe.ValidationError)
 
     # If shed mode was used, infer the batch from the selected shed.
     if selection_mode == 'Shed' and poultry_shed:
@@ -385,6 +448,10 @@ def create_collection_entry(date_of_collection, rows, selection_mode=None, poult
             frappe.throw(_("Poultry Batch is required for each row"), frappe.ValidationError)
         groups[batch].append(r)
 
+    # One timestamp for the entire submission so rows split by type still group together
+    # in the production report.
+    submission_time = nowtime()
+
     # For each group, load the Poultry Batches doc and append sub-rows
     for batch, sub_rows in groups.items():
         pb = frappe.get_doc("Poultry Batches", batch)
@@ -395,14 +462,25 @@ def create_collection_entry(date_of_collection, rows, selection_mode=None, poult
             product_collected = sub.get("animal_product")
             default_uom = sub.get("default_uom") or ''
             qty = flt(sub.get("quantity_collected") or 0.0)
+            product_type = sub.get("product_type") or "Whole"
             if not product_collected:
                 frappe.throw(_("Each row must include an animal_product"), frappe.ValidationError)
 
+            # When in Shed mode the row was collected at a specific block;
+            # the row may carry it OR we fall back to the top-level poultry_shed arg.
+            row_shed = sub.get("poultry_shed") or (
+                poultry_shed if selection_mode == "Shed" else None
+            )
+
             pb.append("product_inventory_log", {
                 "date_of_collection": date_of_collection or nowdate(),
+                "time_of_collection": submission_time,
+                "milker": collected_by,
+                "poultry_shed": row_shed,
                 "product_collected": product_collected,
+                "product_type": product_type,
                 "products_default_uom": default_uom,
-                "quantity_collected": qty
+                "quantity_collected": qty,
             })
 
         # Save the Poultry Batches doc (this writes the child rows)
@@ -934,15 +1012,13 @@ import frappe
 from frappe.utils import flt
 
 @frappe.whitelist()
-def cull_poultry_batch(batch_name, cull_count):
+def cull_poultry_batch(batch_name, cull_count, poultry_shed=None):
     """
-    Safely add cull_count (int) to Poultry Batch.mortality_count,
-    recalc mortality_rate = (mortality_count / total_animals) * 100,
-    then commit.
-    Returns dict with success flag or error.
+    Add cull_count to Poultry Batch.mortality_count and recompute mortality_rate.
+    If poultry_shed is given, also decrement that block's chicken_count on the batch
+    and refresh the shed's current_poultry_count.
     """
     try:
-        # ensure int
         cull_count = int(float(cull_count))
     except Exception:
         return {"success": False, "error": "Invalid cull_count; must be a whole number."}
@@ -950,13 +1026,11 @@ def cull_poultry_batch(batch_name, cull_count):
     if cull_count <= 0:
         return {"success": False, "error": "Cull count must be a positive integer."}
 
-    # fetch doc
     try:
         doc = frappe.get_doc('Poultry Batches', batch_name)
     except frappe.DoesNotExistError:
         return {"success": False, "error": f"Poultry Batches '{batch_name}' not found."}
 
-    # permission check
     try:
         doc.check_permission('write')
     except Exception:
@@ -972,12 +1046,32 @@ def cull_poultry_batch(batch_name, cull_count):
     if new_mortality > total:
         return {"success": False, "error": "Cull count would exceed total animals in the batch."}
 
-    # atomic update using db_set then commit
+    block_row = None
+    if poultry_shed:
+        for fieldname in ("poultry_shed_blocks", "poultry_shed"):
+            for row in (doc.get(fieldname) or []):
+                if row.get("poultry_shed") == poultry_shed:
+                    block_row = row
+                    break
+            if block_row:
+                break
+        if not block_row:
+            return {"success": False, "error": f"Block '{poultry_shed}' is not part of batch '{batch_name}'."}
+        available_in_block = int(flt(block_row.get("chicken_count") or 0))
+        if cull_count > available_in_block:
+            return {"success": False, "error": f"Cull exceeds animals available in block ({available_in_block})."}
+
     try:
-        # store integer mortality_count
         frappe.db.set_value('Poultry Batches', batch_name, 'mortality_count', new_mortality, update_modified=True)
         mortality_rate = (new_mortality / total) * 100
         frappe.db.set_value('Poultry Batches', batch_name, 'mortality_rate', flt(mortality_rate, 6), update_modified=True)
+
+        if block_row:
+            new_block_count = int(flt(block_row.get("chicken_count") or 0)) - cull_count
+            frappe.db.set_value(
+                block_row.doctype, block_row.name, "chicken_count", max(new_block_count, 0), update_modified=False
+            )
+            _recompute_shed_chicken_count(poultry_shed)
 
         frappe.db.commit()
     except Exception as e:
